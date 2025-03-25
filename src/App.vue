@@ -5,45 +5,53 @@
       class="fixed top-0 w-full bg-white z-50 transition-all duration-300 pb-2"
       :style="headerStyle"
     >
+    <div
+      class="transition-all duration-300 w-full max-w-5xl mx-auto px-4"
+    >
       <div
-        class="max-w-5xl mx-auto flex items-center px-4 transition-all duration-500 ease-in-out"
-        :class="{ 'flex-col': !isScrolled, 'flex-row justify-between': isScrolled }"
+        :class="isScrolled ? 'flex items-center justify-between' : 'flex flex-col items-center'"
+        class="w-full"
       >
-        <!-- Logo -->
-        <img
-          src="/src/assets/images/logo.png"
-          alt="NB Armwrestling Logo"
-          class="transition-all duration-200 ease-out origin-top"
-          :style="{
-            transform: `scale(${isScrolled ? 1 : scale}) translateY(${translateY}px)`,
-            marginTop: isScrolled ? '0' : '0',
-            marginRight: isScrolled ? 'auto' : '0',
-            width: isScrolled ? '4rem' : '10rem'
-          }"
-        />
+      <div :class="isScrolled ? 'flex items-center' : 'align-center'">
+       
+      <img
+        src="/src/assets/images/logo.png"
+        alt="NB Armwrestling Logo"
+        class="transition-all duration-200 ease-out origin-top"
+        :style="{
+          transform: `scale(${isScrolled ? 1 : scale}) translateY(${translateY}px)`,
+          marginTop: isScrolled ? '0' : '0',
+          marginLeft: isScrolled ? '0' : '25px',
+          width: isScrolled ? '4rem' : '10rem'
+        }"
+      />
 
-        <!-- Title -->
-        <h1
-          v-show="!isMobile || !isScrolled"
-          class="font-serif text-3xl font-bold tracking-tight transition-all ease-out text-gray-900"
-          :class="isScrolled ? 'pt-3 ml-[-350px] duration-500' : 'mb-2 mt-[-15px]'"
-          :style="{ transform: `translateY(${isScrolled ? 0 : -shrinkProgress * 100}px)` }"
-        >
-          NB Armwrestling
-        </h1>
+      <h1
+        class="font-serif text-3xl font-bold tracking-tight transition-all ease-out text-gray-900"
+        :class="isScrolled ? 'pt-3 duration-500' : 'mb-2 mt-[-15px] text-center'"
+        :style="{
+          transform: `translateY(${isScrolled ? 0 : -shrinkProgress * 100}px)`, fontSize: isMobile ? '1.5rem' : ''
+        }"
+      >
+        NB Armwrestling
+      </h1>
+      </div>
 
         <!-- Navigation -->
-        <nav
-          class="transition-transform ease-out whitespace-nowrap"
-          :style="{
-            transform: `translateY(${isScrolled ? 0 : -shrinkProgress * 120}px)`,
-            width: isScrolled ? 'auto' : '100%',
-            marginLeft: isScrolled ? 'auto' : '0',
-            textAlign: isScrolled ? 'left' : 'center',
-            paddingTop: isScrolled ? '1rem' : '0'
-          }"
-          :class="{ 'duration-300': isScrolled }"
-        >
+        <!-- Desktop Nav -->
+        <nav v-show="(isMobile && !isScrolled) || !isMobile"
+            class="transition-transform ease-out flex flex-wrap items-center"
+            :class="{
+              'duration-300': isScrolled,
+              'justify-center': !isScrolled,
+              'justify-start': isScrolled
+            }"
+            :style="{
+              transform: `translateY(${isScrolled ? 0 : -shrinkProgress * 120}px)`,
+              width: isScrolled ? 'auto' : '100%',
+              paddingTop: isScrolled ? '1rem' : '0'
+            }"
+          >
           <RouterLink
             v-for="link in links"
             :key="link.path"
@@ -57,6 +65,47 @@
             {{ link.label }}
           </RouterLink>
         </nav>
+
+        <!-- Mobile Hamburger (Only when scrolled) -->
+        <button
+          v-if="isMobile && isScrolled"
+          @click="isMobileMenuOpen = !isMobileMenuOpen"
+          class="md:hidden ml-auto p-2 text-gray-700 hover:text-yellow-600 transition mt-4 mr-2"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+
+        <!-- Mobile Dropdown Menu -->
+        <div
+          v-if="isMobileMenuOpen && isScrolled"
+          class="absolute top-full left-0 w-full bg-white shadow-md md:hidden z-40"
+        >
+          <RouterLink
+            v-for="link in links"
+            :key="link.path"
+            :to="link.path"
+            class="block px-6 py-3 border-b border-gray-100 text-gray-800 hover:bg-yellow-50"
+            @click="isMobileMenuOpen = false"
+            :class="{
+              'text-yellow-700 font-semibold underline underline-offset-4': router.currentRoute.value.path === link.path
+            }"
+          >
+            {{ link.label }}
+          </RouterLink>
+        </div>
+      </div>
       </div>
     </header>
 
@@ -138,6 +187,8 @@ const handleScroll = () => {
   scrollY.value = window.scrollY
 }
 
+const isMobileMenuOpen = ref(false)
+
 const headerStyle = computed(() => {
   const baseHeight = 235
   const minHeight = 80
@@ -160,7 +211,7 @@ const translateY = computed(() => {
   return shrinkProgress.value * maxTranslate
 })
 
-const isScrolled = computed(() => scrollY.value > 160)
+const isScrolled = computed(() => scrollY.value > 120)
 
 const isMobile = ref(false)
 
