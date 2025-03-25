@@ -1,0 +1,60 @@
+[
+    {
+        "title": "2025 NB Provincials",
+        "date": "2025-04-25T11:00:00",
+        "location": "Club de Sports, 100 Ch Range, Richibucto-Village, NB",
+        "flyer": "/flyers/2025-04-25-Richibuctou.png",
+        "details": {
+            "weighIns": [
+                "Saturday: 11am"
+            ],
+            "competitionTimes": {
+                "Everyone": "12:00 PM"
+            },
+          "divisions": {
+            "Youth (Mixed)": ["6–8", "9–11", "12–14 Boys", "12–14 Girls", "15–17 Boys", "15–17 Girls"],
+            "Ladies Open": ["Under 165 lbs", "Over 165 lbs"],
+            "Men’s Open": ["150 lbs", "176 lbs", "200 lbs", "201+"],
+            "Grandmaster": ["50+"]
+          }
+        }
+      },
+      {
+        "title": "2025 Atlantic Championships",
+        "date": "2025-04-05T11:00:00",
+        "location": "DR Carson & Marion Murray Community Centre, Springhill, NS",
+        "flyer": "/flyers/atlantics_2025.jpg",
+        "details": {
+          "weighIns": [
+            "Friday April 4, 6-9pm",
+            "Saturday: 9-10am Juniors",
+            "Saturday: 9-11am Adults"
+          ],
+          "competitionTimes": {
+            "Juniors": "10:00 AM",
+            "Adults": "12:00 PM"
+          },
+          "divisions": {
+            "Men": ["154", "165", "176", "187", "198", "220", "220+"],
+            "Ladies": ["132", "154", "154+"],
+            "Grand Masters": ["198", "198+"],
+            "Para": ["Right and Left"],
+            "Juniors (Cannot turn 19 in 2025)": [
+              "4 and Under (Mixed)",
+              "6 and Under (Mixed)",
+              "8 and Under (Mixed)",
+              "10 and Under (Mixed)",
+              "Boys 12 and Under",
+              "Girls 12 and Under",
+              "Boys 14 and Under – 132lbs / Over 132lbs",
+              "Girls 14 and Under",
+              "Girls 16 and Under",
+              "Boys 16 and Under – 154 / 154+",
+              "Boys 18 and Under – 165 / Over 165",
+              "Girls 18 and Under"
+            ]
+          }
+        }
+      }
+  ]
+  
