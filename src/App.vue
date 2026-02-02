@@ -36,6 +36,11 @@
                 transform: `translateY(0px)`,
                 fontSize: isMobile ? '1.5rem' : '',
               }"
+              style="
+                text-shadow: 0px 1px 12px #ffd826;
+                font-family: fantasy;
+                color: #2f0b0b;
+              "
             >
               NB Armwrestling
             </h1>
@@ -228,7 +233,7 @@ const isMobileMenuOpen = ref(false);
 
 const headerStyle = computed(() => {
   return {
-    height: isScrolled.value ? "96px" : "235px",
+    height: isScrolled.value ? "85px" : "235px",
     boxShadow: isScrolled.value ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
   };
 });
