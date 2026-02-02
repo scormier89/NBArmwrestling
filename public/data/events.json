@@ -55,6 +55,117 @@
             ]
           }
         }
+      },
+      {
+        "title": "NB Armwrestling Provincials",
+        "date": "2026-03-28T10:00:00",
+        "location": "Moncton Dart Club, 28 Eaton St, Moncton, NB",
+        "flyer": "/flyers/provincials.jpg",
+        "details": {
+          "divisions": {
+            "Men (Left & Right)": ["154 lbs", "176 lbs", "198 lbs", "220 lbs", "Open"],
+            "Ladies (Left & Right)": ["Under 165 lbs", "Open"],
+            "Juniors (Left & Right)": [
+              "6–8 (Boys & Girls)",
+              "9–11 (Boys & Girls)",
+              "12–14 (Boys)",
+              "12–14 (Girls)",
+              "15–16 (Boys)",
+              "15–16 (Girls)",
+              "17–18 (Boys)",
+              "17–18 (Girls)"
+            ],
+            "Grand Masters (50+)": ["Open Class"]
+          },
+          "description": "32 classes total (left & right arm)."
+        }
+      },
+      {
+        "title": "Battle of the Atlantic XXIX",
+        "date": "2026-03-07T12:00:00",
+          "location": "Wellington/Lake Fletcher Firehall, 4132 Highway 2, Wellington, NS B2T 1A3, Canada",
+          "flyer": "/flyers/bota.jpg",
+        "details": {
+          "weighIns": [
+            "Juniors: 9:00 AM",
+            "Adults: 11:00 AM"
+          ],
+          "competitionTimes": {
+            "Juniors": "10:00 AM",
+            "Adults": "12:00 PM"
+          },
+          "divisions": {
+            "Junior (Right & Left)": [
+              "6 & Under (Mixed)",
+              "7–8 (Mixed)",
+              "9–10 (Mixed)",
+              "Girls 11–12",
+              "Boys 11–12",
+              "Girls 13–15",
+              "Boys 13–15",
+              "Girls 16–18",
+              "Boys 16–18"
+            ],
+            "Men’s Amateur (Right & Left)": ["154", "176", "198", "198+"],
+            "Ladies (Right & Left)": ["154", "154+"],
+            "Men’s BOTA (Right & Left)": ["165", "198", "220", "220+"]
+          }
+        }
+      },
+      {
+        "title": "Atlantic Canadian Championships",
+        "date": "2026-04-11T13:00:00",
+        "location": "Dr Carson & Marion Murray Community Centre, 6 Main St, Springhill, NS B0M 1X0, Canada",
+        "flyer": null,
+        "details": {
+          "weighIns": [
+            "Friday: 6:00–9:00 PM (host hotel)",
+            "Saturday: Juniors 9:00–10:00 AM",
+            "Saturday: Seniors 10:00 AM–12:00 PM"
+          ],
+          "competitionTimes": {
+            "Juniors": "10:30 AM",
+            "Seniors": "1:00 PM"
+          },
+          "divisions": {
+            "Men (Right & Left)": ["154", "165", "176", "187", "198", "220", "220+"],
+            "Ladies (Right & Left)": ["TBD at AGM"],
+            "Junior": ["TBD at AGM"]
+          }
+        }
+      },
+      {
+        "title": "CAWF Nationals 2026 – Moncton NB",
+        "date": "2026-06-26T10:00:00",
+        "location": "Moncton Coliseum, Moncton, NB, Canada",
+        "flyer": null,
+        "details": {
+          "competitionTimes": {
+            "Multi-day": "June 26–28"
+          },
+          "website": "https://cawfmoncton2026.ca/",
+          "divisions": {
+            "Senior Men (kg)": ["60", "65", "70", "75", "80", "85", "90", "100", "110", "110+"],
+            "Senior Women (kg)": ["55", "60", "70", "80", "80+"],
+            "Masters Men 40+ (kg)": ["70", "80", "90", "100", "100+"],
+            "Masters Women 40+ (kg)": ["70", "80", "80+"],
+            "Grand Masters Men 50+ (kg)": ["75", "90", "90+"],
+            "Senior Grand Masters Men 60+ (kg)": ["80", "90", "90+"],
+            "Para Men (kg)": ["75", "75+"],
+            "Para Women": ["Open"],
+            "Juniors": [
+              "Mixed 10U 40/40+",
+              "Girls 12 Open",
+              "Girls 14 60/60+",
+              "Girls 16 65/65+",
+              "Girls 18 70/70+",
+              "Boys 12 Open",
+              "Boys 14 65/65+",
+              "Boys 16 70/70+",
+              "Boys 18 70/80/90/90+"
+            ]
+          }
+        }
       }
   ]
   
