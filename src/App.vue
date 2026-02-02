@@ -282,6 +282,7 @@ body {
   background-color: var(--nb-offwhite);
   line-height: 1.7; /* improve long-form readability */
   color: #1f2937;
+  overflow-x: hidden;
 }
 
 h1,
@@ -319,7 +320,10 @@ nav a {
   font-weight: 600;
   padding: 0.3em 0.6em;
   border-radius: 6px;
-  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease;
 }
 nav a.router-link-exact-active {
   color: #fff !important;
@@ -336,7 +340,10 @@ button,
 .btn {
   border-radius: 0.6rem;
   font-weight: 600;
-  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease,
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
     transform 0.18s ease;
 }
 button:focus-visible,
@@ -348,7 +355,9 @@ button:focus-visible,
 [v-intersect] {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
 }
 [v-intersect].is-visible {
   opacity: 1;

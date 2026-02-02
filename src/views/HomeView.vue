@@ -2,8 +2,11 @@
   <section>
     <!-- Hero Section with Logo -->
     <div
-      class="relative h-[500px] bg-fixed bg-center bg-cover bg-no-repeat flex flex-col items-center justify-center"
-      :style="{ backgroundImage: `url(${heroImage})` }"
+      class="relative h-[500px] bg-fixed bg-cover bg-no-repeat flex flex-col items-center justify-center w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]"
+      :style="{
+        backgroundImage: `url(${heroImage})`,
+        backgroundPosition: 'center 20%',
+      }"
     >
       <div
         class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-[#f8f5f1]/90"
@@ -12,11 +15,11 @@
 
     <!-- Main Content Panel -->
     <div
-      class="max-w-3xl mx-auto px-4 py-16 text-center bg-[#f8f5f1] -mt-28 relative z-10 rounded-xl shadow-md"
+      class="max-w-3xl mx-auto px-0 py-16 text-center bg-[#f8f5f1] -mt-28 relative z-10 rounded-xl shadow-md"
     >
       <h2
         class="text-5xl sm:text-6xl font-serif font-extrabold text-gray-900 tracking-tight mb-6"
-        style="font-family: 'Playfair Display', serif"
+        style="font-family: &quot;Playfair Display&quot;, serif"
       >
         Arm Wrestling in New Brunswick
       </h2>
@@ -112,7 +115,14 @@
               src="https://www.youtube-nocookie.com/embed/McgTdXpHI5I?rel=0"
               title="NB Armwrestling Highlights"
               frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allow="
+                accelerometer;
+                autoplay;
+                clipboard-write;
+                encrypted-media;
+                gyroscope;
+                picture-in-picture;
+              "
               allowfullscreen
               referrerpolicy="strict-origin-when-cross-origin"
               class="absolute top-0 left-0 w-full h-full"
@@ -138,7 +148,7 @@
 </template>
 
 <script setup>
-import heroImage from "@/assets/images/armwrestlers.jpg";
+import heroImage from "@/assets/images/team2.jpg";
 import logoImage from "@/assets/images/logo.png";
 import { onMounted, ref } from "vue";
 import { useEventStore } from "@/stores/eventStore";
@@ -156,7 +166,7 @@ const closeLightbox = () => {
 
 const openInMaps = (location) => {
   const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-    location
+    location,
   )}`;
   window.open(url, "_blank");
 };
