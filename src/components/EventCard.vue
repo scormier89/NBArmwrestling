@@ -25,7 +25,7 @@
         <div class="relative w-full h-full min-h-[260px]">
           <iframe
             :src="`https://www.google.com/maps?q=${encodeURIComponent(
-              event.location
+              event.location,
             )}&output=embed`"
             title="Event location map"
             loading="lazy"
@@ -102,44 +102,107 @@
         </div>
 
         <div class="mt-4 grid grid-cols-1 gap-4 text-sm text-gray-800">
-          <!-- Weight Classes -->
-          <div v-if="event.weightClasses || event.details?.divisions">
-            <p class="font-semibold text-gray-900 mb-1">Divisions</p>
-            <div class="space-y-2">
-              <div
-                v-for="(classes, division) in event.weightClasses ||
-                event.details?.divisions"
-                :key="division"
-              >
-                <strong class="text-gray-900">{{ division }}:</strong>
-                <span class="ml-1 text-gray-700">{{ classes.join(", ") }}</span>
+          <!-- Mobile Accordions -->
+          <div class="md:hidden">
+            <details
+              v-if="event.weightClasses || event.details?.divisions"
+              class="rounded-lg border border-gray-200 bg-white/80 p-3"
+            >
+              <summary class="font-semibold text-gray-900 cursor-pointer">
+                Divisions & Weight Classes
+              </summary>
+              <div class="mt-2 space-y-2">
+                <div
+                  v-for="(classes, division) in event.weightClasses ||
+                  event.details?.divisions"
+                  :key="division"
+                >
+                  <strong class="text-gray-900">{{ division }}:</strong>
+                  <span class="ml-1 text-gray-700">{{
+                    classes.join(", ")
+                  }}</span>
+                </div>
               </div>
-            </div>
+            </details>
+
+            <details
+              v-if="event.details?.weighIns || event.details?.competitionTimes"
+              class="rounded-lg border border-gray-200 bg-white/80 p-3"
+            >
+              <summary class="font-semibold text-gray-900 cursor-pointer">
+                Schedule Details
+              </summary>
+              <div class="mt-2">
+                <div v-if="event.details.weighIns?.length" class="mb-2">
+                  <p class="font-medium">Weigh-ins:</p>
+                  <ul class="ml-4 list-disc">
+                    <li
+                      v-for="(slot, idx) in event.details.weighIns"
+                      :key="idx"
+                    >
+                      {{ slot }}
+                    </li>
+                  </ul>
+                </div>
+                <div v-if="event.details.competitionTimes">
+                  <p class="font-medium">Start Times:</p>
+                  <ul class="ml-4 list-disc">
+                    <li
+                      v-for="(time, group) in event.details.competitionTimes"
+                      :key="group"
+                    >
+                      {{ group }}: {{ time }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </details>
           </div>
 
-          <!-- Schedule Info -->
-          <div
-            v-if="event.details?.weighIns || event.details?.competitionTimes"
-          >
-            <p class="font-semibold text-gray-900 mb-1">Schedule</p>
-            <div v-if="event.details.weighIns?.length" class="mb-2">
-              <p class="font-medium">Weigh-ins:</p>
-              <ul class="ml-4 list-disc">
-                <li v-for="(slot, idx) in event.details.weighIns" :key="idx">
-                  {{ slot }}
-                </li>
-              </ul>
-            </div>
-            <div v-if="event.details.competitionTimes">
-              <p class="font-medium">Start Times:</p>
-              <ul class="ml-4 list-disc">
-                <li
-                  v-for="(time, group) in event.details.competitionTimes"
-                  :key="group"
+          <!-- Desktop Details -->
+          <div class="hidden md:block">
+            <!-- Weight Classes -->
+            <div v-if="event.weightClasses || event.details?.divisions">
+              <p class="font-semibold text-gray-900 mb-1">Divisions</p>
+              <div class="space-y-2">
+                <div
+                  v-for="(classes, division) in event.weightClasses ||
+                  event.details?.divisions"
+                  :key="division"
                 >
-                  {{ group }}: {{ time }}
-                </li>
-              </ul>
+                  <strong class="text-gray-900">{{ division }}:</strong>
+                  <span class="ml-1 text-gray-700">{{
+                    classes.join(", ")
+                  }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Schedule Info -->
+            <div
+              v-if="event.details?.weighIns || event.details?.competitionTimes"
+              class="mt-4"
+            >
+              <p class="font-semibold text-gray-900 mb-1">Schedule</p>
+              <div v-if="event.details.weighIns?.length" class="mb-2">
+                <p class="font-medium">Weigh-ins:</p>
+                <ul class="ml-4 list-disc">
+                  <li v-for="(slot, idx) in event.details.weighIns" :key="idx">
+                    {{ slot }}
+                  </li>
+                </ul>
+              </div>
+              <div v-if="event.details.competitionTimes">
+                <p class="font-medium">Start Times:</p>
+                <ul class="ml-4 list-disc">
+                  <li
+                    v-for="(time, group) in event.details.competitionTimes"
+                    :key="group"
+                  >
+                    {{ group }}: {{ time }}
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -153,7 +216,7 @@
           >
             <iframe
               :src="`https://www.google.com/maps?q=${encodeURIComponent(
-                event.location
+                event.location,
               )}&output=embed`"
               title="Event location map"
               loading="lazy"
@@ -176,7 +239,7 @@ const emit = defineEmits(["lightbox"]);
 
 const openInMaps = (location) => {
   const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-    location
+    location,
   )}`;
   window.open(url, "_blank");
 };
