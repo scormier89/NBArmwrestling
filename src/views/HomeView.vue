@@ -109,11 +109,12 @@
             style="padding-bottom: 56.25%; height: 0"
           >
             <iframe
-              src="https://www.youtube.com/embed/McgTdXpHI5I"
+              src="https://www.youtube-nocookie.com/embed/McgTdXpHI5I?rel=0"
               title="NB Armwrestling Highlights"
               frameborder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowfullscreen
+              referrerpolicy="strict-origin-when-cross-origin"
               class="absolute top-0 left-0 w-full h-full"
             ></iframe>
           </div>

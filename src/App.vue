@@ -20,9 +20,7 @@
               alt="NB Armwrestling Logo"
               class="transition-all duration-200 ease-out origin-top"
               :style="{
-                transform: `scale(${
-                  isScrolled ? 1 : scale
-                }) translateY(${translateY}px)`,
+                transform: `scale(1) translateY(0px)`,
                 marginTop: isScrolled ? '0' : '0',
                 marginLeft: isScrolled ? '0' : '25px',
                 width: isScrolled ? '4rem' : '10rem',
@@ -35,9 +33,7 @@
                 isScrolled ? 'pt-3 duration-500' : 'mb-2 mt-[-15px] text-center'
               "
               :style="{
-                transform: `translateY(${
-                  isScrolled ? 0 : -shrinkProgress * 100
-                }px)`,
+                transform: `translateY(0px)`,
                 fontSize: isMobile ? '1.5rem' : '',
               }"
             >
@@ -56,9 +52,7 @@
               'justify-start': isScrolled,
             }"
             :style="{
-              transform: `translateY(${
-                isScrolled ? 0 : -shrinkProgress * 60
-              }px)`,
+              transform: `translateY(0px)`,
               width: isScrolled ? 'auto' : '100%',
               paddingTop: isScrolled ? '1rem' : '0',
             }"
@@ -233,12 +227,8 @@ const handleScroll = () => {
 const isMobileMenuOpen = ref(false);
 
 const headerStyle = computed(() => {
-  const baseHeight = 235;
-  const minHeight = 96;
-  const dynamicHeight =
-    baseHeight - (baseHeight - minHeight) * shrinkProgress.value;
   return {
-    height: `${Math.round(dynamicHeight)}px`,
+    height: isScrolled.value ? "96px" : "235px",
     boxShadow: isScrolled.value ? "0 1px 3px rgba(0,0,0,0.08)" : "none",
   };
 });

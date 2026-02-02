@@ -17,9 +17,9 @@
       <p class="text-gray-700 mb-2">
         Email:
         <a
-          href="mailto:info@nbarmwrestling.ca"
+          href="mailto:nbarmwrestling@outlook.com"
           class="text-[#0055a4] underline hover:text-[#003366]"
-          >info@nbarmwrestling.ca</a
+          >nbarmwrestling@outlook.com</a
         >
       </p>
       <p class="text-gray-700">We aim to respond within 48 hours.</p>

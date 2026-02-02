@@ -40,6 +40,7 @@
       href="https://cawf.ca/"
       target="_blank"
       rel="noopener"
+      style="color: white"
       class="inline-block mt-4 px-6 py-2 rounded-md bg-[#0055a4] text-white font-semibold shadow-sm hover:bg-[#003366] transition-colors duration-200"
       >Visit CAWF Website</a
     >
