@@ -50,7 +50,7 @@
           <!-- Desktop Nav -->
           <nav
             v-show="(isMobile && !isScrolled) || !isMobile"
-            class="transition-transform ease-out flex flex-wrap items-center"
+            class="transition-transform ease-out flex flex-nowrap items-center overflow-x-auto"
             :class="{
               'duration-300': isScrolled,
               'justify-center': !isScrolled,
@@ -66,7 +66,7 @@
               v-for="link in links"
               :key="link.path"
               :to="link.path"
-              class="mx-1.5 text-xs sm:text-sm font-semibold tracking-[0.18em] uppercase px-2 py-[0.35rem] rounded-md transition-all duration-200 border-b-2 border-transparent"
+              class="mx-0.5 sm:mx-1.5 text-[0.65rem] sm:text-sm font-semibold tracking-[0.1em] sm:tracking-[0.18em] uppercase px-1 sm:px-2 py-[0.3rem] leading-none rounded-md transition-all duration-200 border-b-2 border-transparent whitespace-nowrap"
               :class="{
                 'text-white border-b-2 border-[#c21818] bg-transparent':
                   router.currentRoute.value.path === link.path,
@@ -229,6 +229,10 @@ const handleScroll = () => {
   scrollY.value = window.scrollY;
 };
 
+const handleResize = () => {
+  isMobile.value = window.innerWidth <= 768;
+};
+
 const isMobileMenuOpen = ref(false);
 
 const headerStyle = computed(() => {
@@ -256,12 +260,14 @@ const isMobile = ref(false);
 
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
+  window.addEventListener("resize", handleResize);
   router.beforeEach(() => window.scrollTo(0, 0));
-  isMobile.value = window.innerWidth <= 768;
+  handleResize();
 });
 
 onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
+  window.removeEventListener("resize", handleResize);
 });
 </script>
 
