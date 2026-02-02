@@ -1,228 +1,285 @@
 <template>
-  <div
-    class="bg-white rounded-xl shadow-sm border border-gray-100 mb-10 overflow-hidden transition-all duration-200 ease-in-out hover:shadow-md fade-in"
-    :class="index % 2 === 1 ? 'md:flex-row-reverse' : ''"
-  >
-    <div class="grid grid-cols-1 md:grid-cols-2">
-      <!-- Flyer or Map (fills opposite side) -->
-      <div
-        v-if="event.flyer"
-        class="bg-gray-50"
-        :class="index % 2 === 1 ? 'md:order-2' : 'md:order-1'"
-      >
-        <img
-          :src="event.flyer"
-          :alt="event.title"
-          class="w-full h-full object-cover cursor-pointer"
-          @click="emit('lightbox', event.flyer)"
-        />
-      </div>
-      <div
-        v-else
-        class="bg-gray-50"
-        :class="index % 2 === 1 ? 'md:order-2' : 'md:order-1'"
-      >
-        <div class="relative w-full h-full min-h-[260px]">
-          <iframe
-            :src="`https://www.google.com/maps?q=${encodeURIComponent(
-              event.location,
-            )}&output=embed`"
-            title="Event location map"
-            loading="lazy"
-            class="absolute top-0 left-0 w-full h-full"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </div>
-      </div>
-
-      <!-- Event Details -->
-      <div
-        class="p-7 sm:p-8 flex flex-col gap-2 text-center md:text-left"
-        :class="index % 2 === 1 ? 'md:order-1' : 'md:order-2'"
-      >
-        <h3 class="text-2xl font-serif font-bold text-gray-900 mb-2">
-          {{ event.title }}
-        </h3>
-        <p class="text-base font-semibold text-gray-900 tracking-wide mb-1">
-          {{ new Date(event.date).toLocaleString() }}
-        </p>
-
-        <button
-          class="inline-flex items-center space-x-1 text-sm text-blue-700 underline hover:text-blue-900 mb-1"
-          @click="openInMaps(event.location)"
+  <!--
+    UI polish pass: tighter max-width container, stronger typography hierarchy,
+    elevated card styling, clearer action buttons, improved media treatment,
+    and scannable divisions/schedule layout with consistent map styling.
+  -->
+  <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+    <div
+      class="bg-white rounded-2xl shadow-sm border border-slate-200/70 mb-10 overflow-hidden transition-all duration-200 ease-in-out hover:shadow-lg hover:border-slate-300 fade-in"
+      :class="index % 2 === 1 ? 'md:flex-row-reverse' : ''"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2">
+        <!-- Flyer or Map (fills opposite side) -->
+        <div
+          v-if="event.flyer"
+          class="bg-slate-50"
+          :class="index % 2 === 1 ? 'md:order-2' : 'md:order-1'"
         >
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path
-              fill-rule="evenodd"
-              d="M10 2a6 6 0 016 6c0 4.418-6 10-6 10S4 12.418 4 8a6 6 0 016-6zm0 8a2 2 0 100-4 2 2 0 000 4z"
-              clip-rule="evenodd"
-            />
-          </svg>
-          <span>{{ event.location }}</span>
-        </button>
+          <div class="relative w-full h-full min-h-[260px] md:min-h-[360px]">
+            <div class="absolute inset-0 p-3 sm:p-4">
+              <img
+                :src="event.flyer"
+                :alt="event.title"
+                class="w-full h-full object-cover cursor-pointer rounded-xl border border-slate-200/70 shadow-sm"
+                @click="emit('lightbox', event.flyer)"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          v-else
+          class="bg-slate-50"
+          :class="index % 2 === 1 ? 'md:order-2' : 'md:order-1'"
+        >
+          <div class="relative w-full h-full min-h-[260px] md:min-h-[360px]">
+            <div class="absolute inset-0 p-3 sm:p-4">
+              <div
+                class="relative w-full h-full overflow-hidden rounded-xl border border-slate-200/70 shadow-sm"
+              >
+                <iframe
+                  :src="`https://www.google.com/maps?q=${encodeURIComponent(
+                    event.location,
+                  )}&output=embed`"
+                  title="Event location map"
+                  loading="lazy"
+                  class="absolute top-0 left-0 w-full h-full"
+                  referrerpolicy="no-referrer-when-downgrade"
+                ></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
 
-        <div class="mb-3 flex flex-wrap gap-2">
-          <a
-            v-if="event.details && event.details.website"
-            :href="event.details.website"
-            target="_blank"
-            rel="noopener"
-            class="inline-flex items-center gap-1.5 text-xs font-semibold text-white !text-white bg-[#0055a4] border border-[#0055a4] rounded px-3 py-1 hover:bg-[#003d7a] transition"
+        <!-- Event Details -->
+        <div
+          class="p-7 sm:p-9 flex flex-col gap-3 text-center md:text-left"
+          :class="index % 2 === 1 ? 'md:order-1' : 'md:order-2'"
+        >
+          <div class="space-y-2">
+            <p
+              class="text-xs font-semibold tracking-[0.2em] text-slate-500 uppercase"
+            >
+              Upcoming Event
+            </p>
+            <h3
+              class="text-3xl sm:text-[1.8rem] font-serif font-bold text-slate-900 leading-tight"
+            >
+              {{ event.title }}
+            </h3>
+            <p
+              class="text-sm sm:text-base font-semibold text-slate-800 tracking-wide"
+            >
+              {{ new Date(event.date).toLocaleString() }}
+            </p>
+          </div>
+
+          <button
+            class="inline-flex items-center justify-center gap-1.5 text-sm font-semibold text-[#0b4a8b] hover:text-[#063666] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0b4a8b] focus-visible:ring-offset-2 rounded-md transition"
+            @click="openInMaps(event.location)"
+            aria-label="Open event location in Google Maps"
           >
-            <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
               <path
-                d="M12.293 2.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-7.5 7.5a1 1 0 01-.707.293H5a1 1 0 01-1-1v-4.5a1 1 0 01.293-.707l7.5-7.5z"
+                fill-rule="evenodd"
+                d="M10 2a6 6 0 016 6c0 4.418-6 10-6 10S4 12.418 4 8a6 6 0 016-6zm0 8a2 2 0 100-4 2 2 0 000 4z"
+                clip-rule="evenodd"
               />
             </svg>
-            Visit Event Website
-          </a>
-          <a
-            :href="getGoogleCalendarUrl(event)"
-            target="_blank"
-            rel="noopener"
-            class="inline-block text-xs font-semibold text-gray-800 border border-gray-300 rounded px-3 py-1 hover:border-[#0055a4] hover:text-[#0055a4] transition"
-          >
-            Add to Google Calendar
-          </a>
-          <a
-            :href="getOutlookCalendarUrl(event)"
-            target="_blank"
-            rel="noopener"
-            class="inline-block text-xs font-semibold text-gray-800 border border-gray-300 rounded px-3 py-1 hover:border-[#0055a4] hover:text-[#0055a4] transition"
-          >
-            Add to Outlook
-          </a>
-          <a
-            :href="getIcsDataUrl(event)"
-            class="inline-block text-xs font-semibold text-gray-800 border border-gray-300 rounded px-3 py-1 hover:border-[#0055a4] hover:text-[#0055a4] transition"
-            :download="`${event.title}.ics`"
-          >
-            Download .ics
-          </a>
-        </div>
+            <span class="underline underline-offset-4">{{
+              event.location
+            }}</span>
+          </button>
 
-        <div class="mt-4 grid grid-cols-1 gap-4 text-sm text-gray-800">
-          <!-- Mobile Accordions -->
-          <div class="md:hidden">
-            <details
-              v-if="event.weightClasses || event.details?.divisions"
-              class="rounded-lg border border-gray-200 bg-white/80 p-3"
+          <div class="mb-2 flex flex-wrap gap-2">
+            <a
+              v-if="event.details && event.details.website"
+              :href="event.details.website"
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center justify-center gap-1.5 h-9 px-4 text-xs font-semibold text-white !text-white bg-[#0055a4] border border-[#0055a4] rounded-md shadow-sm hover:bg-[#003d7a] hover:border-[#003d7a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0055a4] focus-visible:ring-offset-2 transition"
             >
-              <summary class="font-semibold text-gray-900 cursor-pointer">
-                Divisions & Weight Classes
-              </summary>
-              <div class="mt-2 space-y-2">
-                <div
-                  v-for="(classes, division) in event.weightClasses ||
-                  event.details?.divisions"
-                  :key="division"
-                >
-                  <strong class="text-gray-900">{{ division }}:</strong>
-                  <span class="ml-1 text-gray-700">{{
-                    classes.join(", ")
-                  }}</span>
-                </div>
-              </div>
-            </details>
-
-            <details
-              v-if="event.details?.weighIns || event.details?.competitionTimes"
-              class="rounded-lg border border-gray-200 bg-white/80 p-3"
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  d="M12.293 2.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-7.5 7.5a1 1 0 01-.707.293H5a1 1 0 01-1-1v-4.5a1 1 0 01.293-.707l7.5-7.5z"
+                />
+              </svg>
+              Visit Event Website
+            </a>
+            <a
+              :href="getGoogleCalendarUrl(event)"
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center justify-center h-9 px-4 text-xs font-semibold text-slate-800 border border-slate-300 rounded-md hover:border-[#0055a4] hover:text-[#0055a4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0055a4] focus-visible:ring-offset-2 transition"
             >
-              <summary class="font-semibold text-gray-900 cursor-pointer">
-                Schedule Details
-              </summary>
-              <div class="mt-2">
-                <div v-if="event.details.weighIns?.length" class="mb-2">
-                  <p class="font-medium">Weigh-ins:</p>
-                  <ul class="ml-4 list-disc">
-                    <li
-                      v-for="(slot, idx) in event.details.weighIns"
-                      :key="idx"
-                    >
-                      {{ slot }}
-                    </li>
-                  </ul>
-                </div>
-                <div v-if="event.details.competitionTimes">
-                  <p class="font-medium">Start Times:</p>
-                  <ul class="ml-4 list-disc">
-                    <li
-                      v-for="(time, group) in event.details.competitionTimes"
-                      :key="group"
-                    >
-                      {{ group }}: {{ time }}
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </details>
+              Add to Google Calendar
+            </a>
+            <a
+              :href="getOutlookCalendarUrl(event)"
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center justify-center h-9 px-4 text-xs font-semibold text-slate-800 border border-slate-300 rounded-md hover:border-[#0055a4] hover:text-[#0055a4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0055a4] focus-visible:ring-offset-2 transition"
+            >
+              Add to Outlook
+            </a>
+            <a
+              :href="getIcsDataUrl(event)"
+              class="inline-flex items-center justify-center h-9 px-4 text-xs font-semibold text-slate-800 border border-slate-300 rounded-md hover:border-[#0055a4] hover:text-[#0055a4] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0055a4] focus-visible:ring-offset-2 transition"
+              :download="`${event.title}.ics`"
+            >
+              Download .ics
+            </a>
           </div>
 
-          <!-- Desktop Details -->
-          <div class="hidden md:block">
-            <!-- Weight Classes -->
-            <div v-if="event.weightClasses || event.details?.divisions">
-              <p class="font-semibold text-gray-900 mb-1">Divisions</p>
-              <div class="space-y-2">
-                <div
-                  v-for="(classes, division) in event.weightClasses ||
-                  event.details?.divisions"
-                  :key="division"
-                >
-                  <strong class="text-gray-900">{{ division }}:</strong>
-                  <span class="ml-1 text-gray-700">{{
-                    classes.join(", ")
-                  }}</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Schedule Info -->
-            <div
-              v-if="event.details?.weighIns || event.details?.competitionTimes"
-              class="mt-4"
-            >
-              <p class="font-semibold text-gray-900 mb-1">Schedule</p>
-              <div v-if="event.details.weighIns?.length" class="mb-2">
-                <p class="font-medium">Weigh-ins:</p>
-                <ul class="ml-4 list-disc">
-                  <li v-for="(slot, idx) in event.details.weighIns" :key="idx">
-                    {{ slot }}
-                  </li>
-                </ul>
-              </div>
-              <div v-if="event.details.competitionTimes">
-                <p class="font-medium">Start Times:</p>
-                <ul class="ml-4 list-disc">
-                  <li
-                    v-for="(time, group) in event.details.competitionTimes"
-                    :key="group"
+          <div class="mt-3 grid grid-cols-1 gap-5 text-sm text-slate-800">
+            <!-- Mobile Accordions -->
+            <div class="md:hidden">
+              <details
+                v-if="event.weightClasses || event.details?.divisions"
+                class="rounded-lg border border-slate-200 bg-white/80 p-3"
+              >
+                <summary class="font-semibold text-slate-900 cursor-pointer">
+                  Divisions & Weight Classes
+                </summary>
+                <div class="mt-2 space-y-2">
+                  <div
+                    v-for="(classes, division) in event.weightClasses ||
+                    event.details?.divisions"
+                    :key="division"
                   >
-                    {{ group }}: {{ time }}
-                  </li>
-                </ul>
+                    <strong class="text-slate-900">{{ division }}:</strong>
+                    <span class="ml-1 text-slate-700">{{
+                      classes.join(", ")
+                    }}</span>
+                  </div>
+                </div>
+              </details>
+
+              <details
+                v-if="
+                  event.details?.weighIns || event.details?.competitionTimes
+                "
+                class="rounded-lg border border-slate-200 bg-white/80 p-3"
+              >
+                <summary class="font-semibold text-slate-900 cursor-pointer">
+                  Schedule Details
+                </summary>
+                <div class="mt-2">
+                  <div v-if="event.details.weighIns?.length" class="mb-2">
+                    <p class="font-medium text-slate-900">Weigh-ins:</p>
+                    <ul class="ml-4 list-disc text-slate-700">
+                      <li
+                        v-for="(slot, idx) in event.details.weighIns"
+                        :key="idx"
+                      >
+                        {{ slot }}
+                      </li>
+                    </ul>
+                  </div>
+                  <div v-if="event.details.competitionTimes">
+                    <p class="font-medium text-slate-900">Start Times:</p>
+                    <ul class="ml-4 list-disc text-slate-700">
+                      <li
+                        v-for="(time, group) in event.details.competitionTimes"
+                        :key="group"
+                      >
+                        {{ group }}: {{ time }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </details>
+            </div>
+
+            <!-- Desktop Details -->
+            <div class="hidden md:block">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Weight Classes -->
+                <div v-if="event.weightClasses || event.details?.divisions">
+                  <p
+                    class="text-xs font-semibold tracking-[0.2em] text-slate-500 uppercase mb-2"
+                  >
+                    Divisions
+                  </p>
+                  <div class="space-y-2">
+                    <div
+                      v-for="(classes, division) in event.weightClasses ||
+                      event.details?.divisions"
+                      :key="division"
+                      class="rounded-md border border-slate-200/80 bg-slate-50/60 px-3 py-2"
+                    >
+                      <p class="text-sm font-semibold text-slate-900">
+                        {{ division }}
+                      </p>
+                      <p class="text-sm text-slate-700">
+                        {{ classes.join(", ") }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Schedule Info -->
+                <div
+                  v-if="
+                    event.details?.weighIns || event.details?.competitionTimes
+                  "
+                >
+                  <p
+                    class="text-xs font-semibold tracking-[0.2em] text-slate-500 uppercase mb-2"
+                  >
+                    Schedule
+                  </p>
+                  <div class="space-y-3">
+                    <div v-if="event.details.weighIns?.length">
+                      <p class="font-semibold text-slate-900">Weigh-ins</p>
+                      <ul class="ml-4 list-disc text-slate-700">
+                        <li
+                          v-for="(slot, idx) in event.details.weighIns"
+                          :key="idx"
+                        >
+                          {{ slot }}
+                        </li>
+                      </ul>
+                    </div>
+                    <div v-if="event.details.competitionTimes">
+                      <p class="font-semibold text-slate-900">Start Times</p>
+                      <ul class="ml-4 list-disc text-slate-700">
+                        <li
+                          v-for="(time, group) in event.details
+                            .competitionTimes"
+                          :key="group"
+                        >
+                          {{ group }}: {{ time }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Location Map (only when flyer exists) -->
-        <div v-if="event.flyer" class="mt-4">
-          <p class="font-semibold text-gray-900 mb-2">Location Map</p>
-          <div
-            class="relative w-full overflow-hidden rounded-lg border border-gray-200"
-            style="padding-bottom: 56.25%; height: 0"
-          >
-            <iframe
-              :src="`https://www.google.com/maps?q=${encodeURIComponent(
-                event.location,
-              )}&output=embed`"
-              title="Event location map"
-              loading="lazy"
-              class="absolute top-0 left-0 w-full h-full"
-              referrerpolicy="no-referrer-when-downgrade"
-            ></iframe>
+          <!-- Location Map (only when flyer exists) -->
+          <div v-if="event.flyer" class="mt-4">
+            <p
+              class="text-xs font-semibold tracking-[0.2em] text-slate-500 uppercase mb-2"
+            >
+              Location Map
+            </p>
+            <div
+              class="relative w-full overflow-hidden rounded-xl border border-slate-200 shadow-sm"
+              style="padding-bottom: 56.25%; height: 0"
+            >
+              <iframe
+                :src="`https://www.google.com/maps?q=${encodeURIComponent(
+                  event.location,
+                )}&output=embed`"
+                title="Event location map"
+                loading="lazy"
+                class="absolute top-0 left-0 w-full h-full"
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
           </div>
         </div>
       </div>

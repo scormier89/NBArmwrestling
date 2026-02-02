@@ -319,7 +319,9 @@ header {
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.04);
 }
 
+/* Nav polish: clearer active/hover indicator + focus visibility */
 nav a {
+  position: relative;
   color: #fff;
   text-transform: uppercase;
   letter-spacing: 0.18em; /* subtle spacing for clarity */
@@ -331,9 +333,25 @@ nav a {
     color 0.18s ease,
     border-color 0.18s ease;
 }
+
+nav a:hover::after,
+nav a:focus-visible::after {
+  background: var(--nb-blue);
+  opacity: 1;
+  transform: scaleX(1);
+}
+nav a:focus-visible {
+  outline: 2px solid var(--nb-blue);
+  outline-offset: 2px;
+}
 nav a.router-link-exact-active {
   color: #fff !important;
   border-color: var(--nb-red) !important; /* deliberate, not loud */
+}
+nav a.router-link-exact-active::after {
+  background: var(--nb-red);
+  opacity: 1;
+  transform: scaleX(1);
 }
 
 footer {
