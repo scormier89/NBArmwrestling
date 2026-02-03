@@ -131,9 +131,7 @@
     <footer
       class="bg-[#2b2b2b] text-white py-6 text-center text-sm tracking-wide shadow-inner"
     >
-      <div
-        class="flex flex-col md:flex-row justify-center items-center gap-4 mb-2"
-      >
+      <div class="flex flex-row justify-center items-center gap-4 mb-2">
         <!-- Facebook -->
         <a
           href="https://www.facebook.com/NBArmwrestling"
