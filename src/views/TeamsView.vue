@@ -74,6 +74,7 @@
 
 <script setup>
 import acadianLogo from "@/assets/images/logos/acadian.jpg";
+import basementLogo from "@/assets/images/logos/basement.png";
 import maximumLogo from "@/assets/images/logos/maximum.png";
 import hubcityLogo from "@/assets/images/logos/hubcity.jpg";
 import northwestLogo from "@/assets/images/logos/northwest.jpg";
@@ -120,6 +121,13 @@ const teams = [
     region: "NB",
     fb: "https://www.facebook.com/groups/613527030725413",
     logo: portcityLogo,
+  },
+  {
+    name: "Basement Pullers",
+    city: "St Leonard",
+    region: "NB",
+    fb: "https://www.facebook.com/groups/606670355797570",
+    logo: basementLogo,
   },
 ];
 </script>
