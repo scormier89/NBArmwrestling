@@ -60,14 +60,13 @@
               class="relative overflow-hidden rounded-xl border border-slate-200 shadow-sm flex-1 min-h-[280px] lg:min-h-[320px]"
             >
               <div
-                v-if="mapsReady"
                 ref="mapEl"
                 class="absolute top-0 left-0 w-full h-full"
                 role="img"
                 aria-label="Map showing team locations in New Brunswick"
               ></div>
               <iframe
-                v-else
+                v-if="mapFailed"
                 :src="fallbackMapUrl"
                 title="Map showing team locations in New Brunswick"
                 loading="lazy"
@@ -99,8 +98,8 @@
               </div>
               <p class="mt-2 text-xs text-slate-500">
                 Tap a team to highlight its pin.
-                <span v-if="!mapsReady"
-                  >(Using map preview while interactive map loads.)</span
+                <span v-if="mapFailed"
+                  >(Using map preview — interactive map unavailable.)</span
                 >
               </p>
             </div>
@@ -281,6 +280,7 @@ const selectedTeam = ref(null);
 const mobileView = ref("list");
 const mapEl = ref(null);
 const mapsReady = ref(false);
+const mapFailed = ref(false);
 let mapInstance = null;
 let geocoder = null;
 let markerMap = new Map();
@@ -480,6 +480,7 @@ onMounted(async () => {
     await loadGoogleMaps(apiKey);
     if (!(window.google && window.google.maps) || !mapEl.value) {
       mapsReady.value = false;
+      mapFailed.value = true;
       return;
     }
     mapsReady.value = true;
@@ -513,6 +514,7 @@ onMounted(async () => {
     }
   } catch (e) {
     mapsReady.value = false;
+    mapFailed.value = true;
   }
 });
 
