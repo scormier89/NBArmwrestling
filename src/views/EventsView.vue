@@ -82,16 +82,33 @@
       </p>
     </div>
 
-    <div v-if="loading" class="grid gap-4 md:grid-cols-2">
+    <div v-if="loading">
       <div
-        v-for="n in 4"
-        :key="n"
-        class="border border-slate-200 rounded-2xl bg-white/80 p-6 animate-pulse"
+        class="mb-4 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-3 py-1 text-sm font-medium text-slate-600"
+        role="status"
+        aria-live="polite"
       >
-        <div class="h-5 bg-slate-200 rounded w-3/4 mb-3"></div>
-        <div class="h-4 bg-slate-200 rounded w-1/2 mb-2"></div>
-        <div class="h-4 bg-slate-200 rounded w-1/3 mb-4"></div>
-        <div class="h-9 bg-slate-200 rounded w-32"></div>
+        <span
+          class="h-4 w-4 animate-spin rounded-full border-2 border-slate-300 border-t-sky-700"
+          aria-hidden="true"
+        ></span>
+        Loading events...
+      </div>
+      <p v-if="slowLoading" class="mb-4 text-sm text-slate-500">
+        First load can take a few seconds while events wake up.
+      </p>
+
+      <div class="grid gap-4 md:grid-cols-2">
+        <div
+          v-for="n in 4"
+          :key="n"
+          class="border border-slate-200 rounded-2xl bg-white/80 p-6 animate-pulse"
+        >
+          <div class="h-5 bg-slate-200 rounded w-3/4 mb-3"></div>
+          <div class="h-4 bg-slate-200 rounded w-1/2 mb-2"></div>
+          <div class="h-4 bg-slate-200 rounded w-1/3 mb-4"></div>
+          <div class="h-9 bg-slate-200 rounded w-32"></div>
+        </div>
       </div>
     </div>
 
@@ -179,6 +196,7 @@ const API_BASE = import.meta.env.DEV
 const TENANT_HEADER = { "x-tenant-id": "nbaw" };
 
 const loading = ref(true);
+const slowLoading = ref(false);
 const error = ref(null);
 const tournaments = ref([]);
 const activeTournament = ref(null);
@@ -282,8 +300,13 @@ const eligibleDivisionsForTournament = (tournament) => {
 };
 
 const load = async () => {
+  let slowLoadingTimer = null;
   loading.value = true;
+  slowLoading.value = false;
   error.value = null;
+  slowLoadingTimer = window.setTimeout(() => {
+    slowLoading.value = true;
+  }, 2500);
   try {
     const res = await fetch(`${API_BASE}/v2/tournaments`, {
       headers: TENANT_HEADER,
@@ -296,6 +319,8 @@ const load = async () => {
   } catch {
     error.value = "Could not load events — please refresh.";
   } finally {
+    if (slowLoadingTimer) window.clearTimeout(slowLoadingTimer);
+    slowLoading.value = false;
     loading.value = false;
   }
 };

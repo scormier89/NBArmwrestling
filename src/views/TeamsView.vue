@@ -60,11 +60,20 @@
               class="relative overflow-hidden rounded-xl border border-slate-200 shadow-sm flex-1 min-h-[280px] lg:min-h-[320px]"
             >
               <div
+                v-if="mapsReady"
                 ref="mapEl"
                 class="absolute top-0 left-0 w-full h-full"
                 role="img"
                 aria-label="Map showing team locations in New Brunswick"
               ></div>
+              <iframe
+                v-else
+                :src="fallbackMapUrl"
+                title="Map showing team locations in New Brunswick"
+                loading="lazy"
+                class="absolute top-0 left-0 w-full h-full"
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
             </div>
             <div class="mt-3 text-sm text-slate-600">
               <p>
@@ -90,7 +99,9 @@
               </div>
               <p class="mt-2 text-xs text-slate-500">
                 Tap a team to highlight its pin.
-                <span v-if="!mapsReady">(Map loading…)</span>
+                <span v-if="!mapsReady"
+                  >(Using map preview while interactive map loads.)</span
+                >
               </p>
             </div>
           </div>
@@ -417,7 +428,7 @@ const refreshMap = () => {
 
 const setMobileView = async (view) => {
   mobileView.value = view;
-  if (view === "map") {
+  if (view === "map" && mapsReady.value) {
     await nextTick();
     refreshMap();
   }
@@ -432,6 +443,13 @@ const hoveredTeamCity = computed(() => {
 });
 
 const activeTeam = computed(() => hoveredTeam.value || selectedTeam.value);
+
+const fallbackMapUrl = computed(() => {
+  const query = activeTeam.value
+    ? `${activeTeam.value.city}, ${activeTeam.value.region || "NB"}`
+    : "New Brunswick, Canada";
+  return `https://www.google.com/maps?q=${encodeURIComponent(query)}&output=embed`;
+});
 
 onMounted(async () => {
   teamObserver = new IntersectionObserver(
