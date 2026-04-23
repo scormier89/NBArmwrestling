@@ -1,13 +1,12 @@
 <template>
-  <section class="max-w-4xl mx-auto px-4 py-10">
-    <h1 class="text-3xl font-serif font-bold mb-6 tracking-tight">
-      Admin Panel
-    </h1>
+  <section class="admin-ui mx-auto max-w-5xl px-4 py-8">
+    <div class="page-surface mb-6 p-6 sm:p-7">
+      <p class="section-label mb-2">Management Console</p>
+      <h1 class="text-3xl font-bold tracking-tight">Admin Panel</h1>
+    </div>
 
     <!-- Auth -->
-    <div
-      class="mb-8 p-5 border border-gray-100 rounded-xl bg-white/90 shadow-sm"
-    >
+    <div class="page-surface mb-8 p-5 sm:p-6">
       <div v-if="!auth.token" class="space-y-3">
         <p class="text-sm text-gray-700">
           Login with the pre-configured admin account.
@@ -16,24 +15,15 @@
           >
         </p>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <input
-            v-model="email"
-            class="border border-gray-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition"
-            placeholder="Email"
-          />
+          <input v-model="email" class="form-shell" placeholder="Email" />
           <input
             v-model="password"
             type="password"
-            class="border border-gray-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition"
+            class="form-shell"
             placeholder="Password"
           />
         </div>
-        <button
-          @click="doLogin"
-          class="bg-blue-700 text-white px-4 py-2 rounded-md hover:bg-blue-800 transition-colors"
-        >
-          Login
-        </button>
+        <button @click="doLogin" class="btn-primary">Login</button>
       </div>
       <div v-else class="flex items-center justify-between">
         <p class="text-sm">
@@ -43,18 +33,13 @@
           <span v-if="auth.isLocal" class="text-xs text-gray-500"
             >Local-only auth</span
           >
-          <button @click="auth.logout()" class="text-red-700 underline">
-            Logout
-          </button>
+          <button @click="auth.logout()" class="btn-danger-soft">Logout</button>
         </div>
       </div>
     </div>
 
     <!-- Create Tournament -->
-    <div
-      v-if="auth.token"
-      class="mb-10 p-5 border border-gray-100 rounded-xl bg-white/90 shadow-sm"
-    >
+    <div v-if="auth.token" class="page-surface mb-10 p-5 sm:p-6">
       <h2 class="text-xl font-semibold mb-4 tracking-wide">
         Create Tournament
       </h2>
@@ -64,7 +49,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           <input
             v-model="form.name"
-            class="border border-gray-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition"
+            class="form-shell"
             placeholder="Name"
             required
           />
@@ -78,19 +63,19 @@
           <input
             v-model="form.startDate"
             type="datetime-local"
-            class="border border-gray-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition"
+            class="form-shell"
             required
           />
           <input
             v-model="form.endDate"
             type="datetime-local"
-            class="border border-gray-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition"
+            class="form-shell"
           />
           <input
             v-model.number="form.maxAthletes"
             type="number"
             min="0"
-            class="border border-gray-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition"
+            class="form-shell"
             placeholder="Max Athletes"
           />
           <label class="flex items-center gap-2">
@@ -121,11 +106,14 @@
             <div v-if="loadingMeta" class="text-gray-600">
               Loading divisions...
             </div>
-            <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div
+              v-else
+              class="stagger-list grid grid-cols-1 md:grid-cols-2 gap-4"
+            >
               <div
                 v-for="d in divisionsMeta"
                 :key="d.id"
-                class="border border-gray-200 rounded-lg p-3 bg-white"
+                class="rounded-lg border border-slate-200 bg-white/85 p-3"
               >
                 <div class="flex items-center justify-between mb-2">
                   <p class="font-semibold">
@@ -134,7 +122,7 @@
                   </p>
                   <button
                     type="button"
-                    class="text-blue-700 underline hover:text-blue-900 transition-colors"
+                    class="text-sky-700 underline transition-colors hover:text-sky-900"
                     @click="addPresetDivision(d.id)"
                   >
                     Add
@@ -144,7 +132,7 @@
                   <span
                     v-for="wc in weightClassesMeta[d.id] || []"
                     :key="wc.id ?? wc.label"
-                    class="px-2 py-1 bg-gray-100 rounded-full text-sm"
+                    class="rounded-full bg-slate-100 px-2 py-1 text-sm"
                   >
                     {{ wc.label ?? wc.name ?? wc.id }}
                   </span>
@@ -163,12 +151,14 @@
           </div>
 
           <!-- New Division placeholder -->
-          <div class="mt-6 border-2 border-dashed rounded-lg p-4 bg-white">
+          <div
+            class="mt-6 rounded-lg border-2 border-dashed border-slate-300 bg-white/85 p-4"
+          >
             <div class="flex items-center justify-between mb-2">
               <h3 class="font-semibold">New Division</h3>
               <button
                 type="button"
-                class="text-blue-700 underline hover:text-blue-900 transition-colors"
+                class="text-sky-700 underline transition-colors hover:text-sky-900"
                 @click="addNewDivision"
                 :disabled="!canAddNewDivision"
               >
@@ -179,7 +169,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
               <select
                 v-model.number="newDivision.divisionId"
-                class="border border-gray-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition"
+                class="form-shell"
               >
                 <option :value="null">Select Division</option>
                 <option v-for="d in divisionsMeta" :key="d.id" :value="d.id">
@@ -191,7 +181,7 @@
                 type="number"
                 step="0.01"
                 min="0"
-                class="border border-gray-200 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition"
+                class="form-shell"
                 placeholder="Entry Fee (optional)"
               />
               <div>
@@ -202,7 +192,7 @@
                   v-model="newLabel"
                   @keydown="onNewLabelKeydown"
                   @blur="addNewLabel"
-                  class="border border-gray-200 rounded-md p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition"
+                  class="form-shell w-full"
                   placeholder="e.g. 150 lbs Right"
                 />
               </div>
@@ -211,7 +201,7 @@
               <span
                 v-for="(w, idx) in newDivision.weightClassLabels"
                 :key="idx"
-                class="px-2 py-1 bg-gray-100 rounded-full text-sm flex items-center gap-2"
+                class="flex items-center gap-2 rounded-full bg-slate-100 px-2 py-1 text-sm"
               >
                 {{ w }}
                 <button
@@ -230,11 +220,7 @@
         </div>
 
         <div class="pt-2">
-          <button
-            type="submit"
-            class="bg-green-700 text-white px-4 py-2 rounded-md hover:bg-green-800 transition-colors"
-            :disabled="creating"
-          >
+          <button type="submit" class="btn-primary" :disabled="creating">
             {{ creating ? "Creating..." : "Create Tournament" }}
           </button>
         </div>
@@ -242,25 +228,22 @@
     </div>
 
     <!-- My Tournaments -->
-    <div
-      v-if="auth.token"
-      class="p-5 border border-gray-100 rounded-xl bg-white/90 shadow-sm"
-    >
+    <div v-if="auth.token" class="page-surface p-5 sm:p-6">
       <h2 class="text-xl font-semibold mb-4 tracking-wide">My Tournaments</h2>
       <div v-if="loadingMy" class="text-gray-600">Loading...</div>
       <div v-else-if="myTournaments.length === 0" class="text-gray-600">
         No tournaments yet.
       </div>
-      <ul>
+      <ul class="stagger-list">
         <li
           v-for="t in myTournaments"
           :key="t.TournamentID"
-          class="py-2 border-b"
+          class="border-b border-slate-200/80 py-3"
         >
           <div class="flex items-center justify-between">
             <div>
               <p class="font-medium">{{ t.Name }}</p>
-              <p class="text-sm text-gray-600">
+              <p class="text-sm text-slate-600">
                 {{ new Date(t.StartDate).toLocaleString() }} — {{ t.Location }}
               </p>
             </div>
@@ -393,7 +376,7 @@ function removeNewLabel(i) {
 const canAddNewDivision = computed(
   () =>
     !!newDivision.value.divisionId &&
-    newDivision.value.weightClassLabels.length > 0
+    newDivision.value.weightClassLabels.length > 0,
 );
 function addNewDivision() {
   if (!canAddNewDivision.value) return;
@@ -464,7 +447,15 @@ function divisionName(id) {
 </script>
 
 <style scoped>
-section {
-  font-family: "Roboto", "Segoe UI", sans-serif;
+.admin-ui :deep(.form-shell) {
+  width: 100%;
+}
+
+.admin-ui :deep(.btn-primary) {
+  min-height: 2.5rem;
+}
+
+.admin-ui :deep(label) {
+  color: #334155;
 }
 </style>

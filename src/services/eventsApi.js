@@ -2,12 +2,13 @@
 // Implements endpoints from the provided OpenAPI and maps results
 // to the UI's simplified event format.
 
-const DEFAULT_BASE = 'http://localhost:7075'
+const DEFAULT_BASE = 'http://localhost:7073'
 const API_MODE = (import.meta?.env?.VITE_API_MODE || 'api').toLowerCase()
 // Use local data only when explicitly enabled by VITE_USE_LOCAL_DATA
 const USE_LOCAL_DATA = (import.meta?.env?.VITE_USE_LOCAL_DATA === 'true')
 const IS_DEV = !!import.meta?.env?.DEV
 const USE_PROXY = (import.meta?.env?.VITE_API_USE_PROXY !== 'false')
+const TENANT_ID = import.meta?.env?.VITE_TENANT_ID || 'nbaw'
 function apiBase() {
   return import.meta?.env?.VITE_API_BASE || DEFAULT_BASE
 }
@@ -22,6 +23,10 @@ function withAuthHeaders(token) {
   const headers = { 'Accept': 'application/json', 'Content-Type': 'application/json' }
   if (token) headers['Authorization'] = `Bearer ${token}`
   return headers
+}
+
+function withTenantHeaders() {
+  return { 'Accept': 'application/json', 'x-tenant-id': TENANT_ID }
 }
 
 // Debug: show runtime configuration in dev
@@ -183,13 +188,27 @@ function writeLocalTournaments(email, list) {
 
 // Map backend Tournament → front-end event model used by Schedule/EventCard
 function mapTournamentToEvent(t) {
+  const tournamentId = t.tournamentId ?? t.TournamentID ?? null
+  const tournamentSlug = t.tournamentSlug ?? t.TournamentSlug ?? null
+  const eventDate = t.eventDate ?? t.StartDate ?? t.date ?? null
+  const name = t.name ?? t.Name ?? t.title ?? ''
+  const location = t.location ?? t.Location ?? null
+
   return {
-    id: t.TournamentID,
-    title: t.Name,
-    date: t.StartDate,
-    location: t.Location,
-    flyer: null, // backend may not provide flyers; UI handles null
-    details: null,
+    id: tournamentId,
+    tournamentId,
+    tournamentSlug,
+    name,
+    title: name,
+    date: eventDate,
+    eventDate,
+    location,
+    registrationEnabled: Boolean(t.registrationEnabled),
+    registrationUrl: t.registrationUrl ?? null,
+    divisionsConfig: t.divisionsConfig ?? null,
+    flyer: t.flyer ?? null,
+    weightClasses: t.weightClasses ?? null,
+    details: t.details ?? null,
   }
 }
 
@@ -198,9 +217,23 @@ export async function getEvents({ province, upcomingOnly = true, lat, lng, radiu
   if (!USE_LOCAL_DATA) {
     // Try backend first
     try {
-      const tournaments = await getTournaments({ province, upcomingOnly, lat, lng, radiusKm, me }, token)
+      const res = await fetch(`${apiUrl('v2/tournaments')}`, { headers: withTenantHeaders() })
+      if (!res.ok) throw new Error(`v2/tournaments failed: ${res.status}`)
+      const payload = await res.json()
+      const tournaments = Array.isArray(payload?.tournaments) ? payload.tournaments : []
       if (IS_DEV) console.info('[eventsApi] Loaded from backend', { count: Array.isArray(tournaments) ? tournaments.length : null })
-      if (Array.isArray(tournaments)) return tournaments.map(mapTournamentToEvent)
+      if (Array.isArray(tournaments)) {
+        let events = tournaments.map(mapTournamentToEvent)
+        if (province) {
+          const p = String(province).toUpperCase()
+          events = events.filter(e => matchesProvince(p, e.location))
+        }
+        if (upcomingOnly) {
+          const now = new Date()
+          events = events.filter(e => new Date(e.date) >= now)
+        }
+        return events
+      }
     } catch (_) {
       // fallthrough to local JSON below
       if (IS_DEV) console.warn('[eventsApi] Backend fetch failed, falling back to local JSON')
@@ -211,7 +244,7 @@ export async function getEvents({ province, upcomingOnly = true, lat, lng, radiu
   if (IS_DEV) console.info('[eventsApi] Using local JSON /data/events.json')
   const fallbackRes = await fetch('/data/events.json', { headers: { 'Accept': 'application/json' } })
   const data = await fallbackRes.json()
-  let arr = Array.isArray(data) ? data : []
+  let arr = Array.isArray(data) ? data.map(mapTournamentToEvent) : []
 
   // Apply local filters similar to backend params
   if (province) {

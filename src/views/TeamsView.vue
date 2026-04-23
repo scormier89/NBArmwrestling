@@ -1,18 +1,23 @@
 <template>
-  <section class="max-w-6xl mx-auto text-center mt-10 px-4">
-    <h2
-      class="text-3xl font-bold mb-8 tracking-tight"
-      style="letter-spacing: 0.02em"
-    >
-      Our Teams
-    </h2>
+  <section class="text-center">
+    <div class="page-surface mb-8 px-5 py-7 sm:px-8">
+      <p class="section-label mb-2">Province-wide Clubs</p>
+      <h2
+        class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl"
+        style="letter-spacing: 0.02em"
+      >
+        Our Teams
+      </h2>
+    </div>
+
+    <h2 class="sr-only" style="letter-spacing: 0.02em">Our Teams</h2>
     <div
-      class="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] items-stretch gap-8 mb-10 text-left"
+      class="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] items-stretch gap-10 mb-12 text-left"
     >
       <!-- Mobile View Toggle -->
       <div class="lg:hidden flex justify-center">
         <div
-          class="inline-flex items-center bg-white border border-gray-200 rounded-full p-1 shadow-sm"
+          class="inline-flex items-center rounded-full border border-slate-200 bg-white/85 p-1 shadow-sm"
           role="tablist"
           aria-label="Teams view"
         >
@@ -20,9 +25,7 @@
             type="button"
             class="px-4 py-2 rounded-full text-sm font-semibold transition"
             :class="
-              mobileView === 'list'
-                ? 'bg-[#0055a4] text-white'
-                : 'text-[#0055a4]'
+              mobileView === 'list' ? 'bg-sky-700 text-white' : 'text-sky-700'
             "
             role="tab"
             :aria-selected="mobileView === 'list'"
@@ -34,9 +37,7 @@
             type="button"
             class="px-4 py-2 rounded-full text-sm font-semibold transition"
             :class="
-              mobileView === 'map'
-                ? 'bg-[#0055a4] text-white'
-                : 'text-[#0055a4]'
+              mobileView === 'map' ? 'bg-sky-700 text-white' : 'text-sky-700'
             "
             role="tab"
             :aria-selected="mobileView === 'map'"
@@ -53,16 +54,10 @@
         :class="mobileView === 'map' ? 'block' : 'hidden lg:block'"
       >
         <div class="lg:sticky lg:top-28 lg:h-[calc(100vh-160px)]">
-          <div
-            class="bg-white/95 border border-gray-200 rounded-2xl shadow-md p-5 h-full flex flex-col"
-          >
-            <p
-              class="text-xs font-semibold tracking-[0.2em] text-gray-500 uppercase mb-3"
-            >
-              Team Locations
-            </p>
+          <div class="page-surface p-5 h-full flex flex-col">
+            <p class="section-label mb-3">Team Locations</p>
             <div
-              class="relative overflow-hidden rounded-xl border border-gray-200 shadow-sm flex-1 min-h-[280px] lg:min-h-[320px]"
+              class="relative overflow-hidden rounded-xl border border-slate-200 shadow-sm flex-1 min-h-[280px] lg:min-h-[320px]"
             >
               <div
                 ref="mapEl"
@@ -71,9 +66,9 @@
                 aria-label="Map showing team locations in New Brunswick"
               ></div>
             </div>
-            <div class="mt-3 text-sm text-gray-600">
+            <div class="mt-3 text-sm text-slate-600">
               <p>
-                <span class="font-semibold text-gray-800">{{
+                <span class="font-semibold text-slate-800">{{
                   hoveredTeamLabel
                 }}</span>
                 <span class="ml-1">{{ hoveredTeamCity }}</span>
@@ -83,7 +78,7 @@
                   :href="hoveredTeam.fb"
                   target="_blank"
                   rel="noopener"
-                  class="inline-flex items-center gap-1 text-[#0055a4] text-xs font-bold px-3 py-1 rounded bg-white hover:bg-[#0055a4] hover:text-white border border-[#0055a4] shadow-sm transition"
+                  class="inline-flex items-center gap-1 rounded border border-sky-700 bg-white px-3 py-1 text-xs font-bold text-sky-700 shadow-sm transition hover:bg-sky-700 hover:text-white"
                 >
                   <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                     <path
@@ -93,7 +88,7 @@
                   Facebook
                 </a>
               </div>
-              <p class="text-xs text-gray-500 mt-2">
+              <p class="mt-2 text-xs text-slate-500">
                 Tap a team to highlight its pin.
                 <span v-if="!mapsReady">(Map loading…)</span>
               </p>
@@ -104,25 +99,30 @@
 
       <!-- Teams List -->
       <div
-        class="order-2 lg:order-1 grid grid-cols-1 md:grid-cols-2 gap-8"
+        class="stagger-list order-2 lg:order-1 grid grid-cols-1 md:grid-cols-2 gap-10"
         :class="mobileView === 'list' ? 'grid' : 'hidden lg:grid'"
       >
         <div
           v-for="team in teams"
           :key="team.name"
-          class="relative group bg-white border border-gray-200 rounded-xl shadow-sm p-7 flex flex-col items-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-[#0055a4]"
+          class="relative group page-surface p-8 flex flex-col items-center transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:border-sky-500/60"
           :class="{
-            'ring-2 ring-[#0055a4]/60 border-[#0055a4] shadow-md':
-              hoveredTeam?.name === team.name,
+            'ring-2 ring-sky-500/60 border-sky-500 shadow-md':
+              activeTeam?.name === team.name,
+            'scale-[1.03] -translate-y-1 shadow-xl':
+              selectedTeam?.name === team.name,
           }"
           @mouseenter="setHoveredTeam(team)"
           @mouseleave="clearHoveredTeam"
           @focusin="setHoveredTeam(team)"
+          @click="setSelectedTeam(team)"
+          :data-team-name="team.name"
+          :ref="(el) => setTeamRef(el, team.name)"
         >
           <button
             type="button"
-            class="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-white flex items-center justify-center text-3xl font-extrabold text-gray-500 mb-5 border-2 border-gray-200 shadow-lg shadow-gray-200/70 group-hover:scale-105 transition-transform overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0055a4] focus-visible:ring-offset-2"
-            @click="team.logo && openLogoLightbox(team.logo, team.name)"
+            class="mb-6 flex h-32 w-32 items-center justify-center overflow-hidden rounded-2xl border-2 border-slate-200 bg-white text-3xl font-extrabold text-slate-500 shadow-lg shadow-slate-200/70 transition-transform group-hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-700 focus-visible:ring-offset-2 sm:h-36 sm:w-36"
+            @click.stop="team.logo && openLogoLightbox(team.logo, team.name)"
             :aria-label="
               team.logo ? `Open ${team.name} logo` : `${team.name} logo`
             "
@@ -144,14 +144,14 @@
             </template>
           </button>
           <h3
-            class="text-2xl font-extrabold mb-1 text-gray-900 tracking-tight group-hover:text-[#0055a4] transition-colors"
+            class="mb-1 text-3xl font-extrabold tracking-tight text-slate-900 transition-colors group-hover:text-sky-700"
           >
             {{ team.name }}
           </h3>
-          <div class="text-base text-gray-600 mb-1 font-medium">
+          <div class="mb-1 text-base font-medium text-slate-600">
             {{ team.city }}
           </div>
-          <div class="text-xs text-gray-400 mb-4 tracking-widest uppercase">
+          <div class="mb-4 text-xs uppercase tracking-widest text-slate-400">
             {{ team.region }}
           </div>
           <div class="flex gap-2 justify-center mt-2">
@@ -160,7 +160,7 @@
               :href="team.fb"
               target="_blank"
               rel="noopener"
-              class="inline-flex items-center gap-1 text-[#0055a4] text-xs font-bold px-3 py-1 rounded bg-white hover:bg-[#0055a4] hover:text-white border border-[#0055a4] shadow-sm transition"
+              class="inline-flex items-center gap-1 rounded border border-sky-700 bg-white px-3 py-1 text-xs font-bold text-sky-700 shadow-sm transition hover:bg-sky-700 hover:text-white"
             >
               <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path
@@ -175,7 +175,7 @@
             class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
           >
             <span
-              class="bg-gray-50 text-gray-400 text-xs px-2 py-1 rounded shadow border border-gray-200"
+              class="rounded border border-slate-200 bg-slate-50 px-2 py-1 text-xs text-slate-400 shadow"
               >More soon</span
             >
           </div>
@@ -186,10 +186,12 @@
     <!-- Logo Lightbox -->
     <div
       v-if="lightboxLogo"
-      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center px-4"
+      class="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/80 px-4"
       @click.self="closeLogoLightbox"
     >
-      <div class="bg-white rounded-2xl p-4 shadow-xl max-w-md w-full">
+      <div
+        class="max-w-md w-full rounded-2xl border border-white/25 bg-white p-4 shadow-xl"
+      >
         <img
           :src="lightboxLogo"
           :alt="lightboxAlt"
@@ -201,7 +203,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch, nextTick } from "vue";
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from "vue";
 import acadianLogo from "@/assets/images/logos/acadian.jpg";
 import basementLogo from "@/assets/images/logos/basement.png";
 import maximumLogo from "@/assets/images/logos/maximum.png";
@@ -264,6 +266,7 @@ const lightboxLogo = ref(null);
 const lightboxAlt = ref("Team logo");
 
 const hoveredTeam = ref(null);
+const selectedTeam = ref(null);
 const mobileView = ref("list");
 const mapEl = ref(null);
 const mapsReady = ref(false);
@@ -271,6 +274,8 @@ let mapInstance = null;
 let geocoder = null;
 let markerMap = new Map();
 let bounds = null;
+const teamRefs = new Map();
+let teamObserver = null;
 
 const openLogoLightbox = (src, name) => {
   if (!src) return;
@@ -286,9 +291,26 @@ const setHoveredTeam = (team) => {
   hoveredTeam.value = team || null;
 };
 
+const setSelectedTeam = (team) => {
+  selectedTeam.value = team || null;
+  hoveredTeam.value = null;
+
+  // Force map focus on click even if computed activeTeam stays the same object.
+  if (mapsReady.value && team?.name) {
+    highlightMarker(team.name);
+    panToTeam(team.name, { animateZoom: true });
+  }
+};
+
 const clearHoveredTeam = () => {
   hoveredTeam.value = null;
-  if (mapsReady.value) resetMapView();
+  if (mapsReady.value && !selectedTeam.value) resetMapView();
+};
+
+const setTeamRef = (el, name) => {
+  if (!el) return;
+  teamRefs.set(name, el);
+  if (teamObserver) teamObserver.observe(el);
 };
 
 function loadGoogleMaps(key) {
@@ -330,7 +352,7 @@ const addTeamMarker = (team, location) => {
     },
   });
   marker.addListener("click", () => {
-    setHoveredTeam(team);
+    setSelectedTeam(team);
   });
   markerMap.set(team.name, marker);
 };
@@ -348,10 +370,23 @@ const highlightMarker = (teamName) => {
   });
 };
 
-const panToTeam = (teamName) => {
+const panToTeam = (teamName, options = {}) => {
   const marker = markerMap.get(teamName);
   if (!marker || !mapInstance) return;
+
+  const { animateZoom = false } = options;
   mapInstance.panTo(marker.getPosition());
+
+  if (animateZoom) {
+    const targetZoom = 8;
+    if ((mapInstance.getZoom() ?? targetZoom) !== targetZoom) {
+      setTimeout(() => {
+        if (mapInstance) mapInstance.setZoom(targetZoom);
+      }, 180);
+    }
+    return;
+  }
+
   mapInstance.setZoom(8);
 };
 
@@ -389,14 +424,39 @@ const setMobileView = async (view) => {
 };
 
 const hoveredTeamLabel = computed(() => {
-  return hoveredTeam.value?.name || "New Brunswick";
+  return activeTeam.value?.name || "New Brunswick";
 });
 
 const hoveredTeamCity = computed(() => {
-  return hoveredTeam.value?.city ? `• ${hoveredTeam.value.city}` : "• Canada";
+  return activeTeam.value?.city ? `• ${activeTeam.value.city}` : "• Canada";
 });
 
+const activeTeam = computed(() => hoveredTeam.value || selectedTeam.value);
+
 onMounted(async () => {
+  teamObserver = new IntersectionObserver(
+    (entries) => {
+      const anchorY = 120; // align to map sticky top (top-28)
+      const visible = entries
+        .filter((e) => e.isIntersecting)
+        .sort(
+          (a, b) =>
+            Math.abs(a.boundingClientRect.top - anchorY) -
+            Math.abs(b.boundingClientRect.top - anchorY),
+        )[0];
+      if (visible) {
+        const name = visible.target.getAttribute("data-team-name");
+        const team = teams.find((t) => t.name === name);
+        if (team && !selectedTeam.value) setHoveredTeam(team);
+      }
+    },
+    { threshold: [0.2, 0.4, 0.6, 0.8] },
+  );
+
+  teamRefs.forEach((el) => {
+    teamObserver.observe(el);
+  });
+
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
   try {
     await loadGoogleMaps(apiKey);
@@ -438,8 +498,12 @@ onMounted(async () => {
   }
 });
 
+onUnmounted(() => {
+  if (teamObserver) teamObserver.disconnect();
+});
+
 watch(
-  () => hoveredTeam.value,
+  () => activeTeam.value,
   (team) => {
     if (!mapsReady.value) return;
     if (!team) {
@@ -447,7 +511,7 @@ watch(
       return;
     }
     highlightMarker(team.name);
-    panToTeam(team.name);
+    panToTeam(team.name, { animateZoom: true });
   },
 );
 </script>

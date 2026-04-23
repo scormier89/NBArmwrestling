@@ -8,15 +8,21 @@
     <div
       class="bg-white rounded-2xl shadow-sm border border-slate-200/70 mb-10 overflow-hidden transition-all duration-200 ease-in-out hover:shadow-lg hover:border-slate-300 fade-in"
       :class="index % 2 === 1 ? 'md:flex-row-reverse' : ''"
+      @mouseenter="emit('hover', event)"
+      @mouseleave="emit('leave')"
+      @focusin="emit('hover', event)"
     >
-      <div class="grid grid-cols-1 md:grid-cols-2">
+      <div
+        class="grid grid-cols-1"
+        :class="event.flyer ? 'md:grid-cols-2' : 'md:grid-cols-1'"
+      >
         <!-- Flyer or Map (fills opposite side) -->
         <div
           v-if="event.flyer"
           class="bg-slate-50"
           :class="index % 2 === 1 ? 'md:order-2' : 'md:order-1'"
         >
-          <div class="relative w-full h-full min-h-[260px] md:min-h-[360px]">
+          <div class="relative w-full aspect-[4/5] md:aspect-[3/4]">
             <div class="absolute inset-0 p-3 sm:p-4">
               <img
                 :src="event.flyer"
@@ -29,10 +35,10 @@
         </div>
         <div
           v-else
-          class="bg-slate-50"
+          class="bg-slate-50 md:hidden"
           :class="index % 2 === 1 ? 'md:order-2' : 'md:order-1'"
         >
-          <div class="relative w-full h-full min-h-[260px] md:min-h-[360px]">
+          <div class="relative w-full aspect-[4/5] md:aspect-[3/4]">
             <div class="absolute inset-0 p-3 sm:p-4">
               <div
                 class="relative w-full h-full overflow-hidden rounded-xl border border-slate-200/70 shadow-sm"
@@ -135,24 +141,17 @@
             <!-- Mobile Accordions -->
             <div class="md:hidden">
               <details
-                v-if="event.weightClasses || event.details?.divisions"
+                v-if="hasDivisions"
                 class="rounded-lg border border-slate-200 bg-white/80 p-3"
               >
                 <summary class="font-semibold text-slate-900 cursor-pointer">
                   Divisions & Weight Classes
                 </summary>
-                <div class="mt-2 space-y-2">
-                  <div
-                    v-for="(classes, division) in event.weightClasses ||
-                    event.details?.divisions"
-                    :key="division"
-                  >
-                    <strong class="text-slate-900">{{ division }}:</strong>
-                    <span class="ml-1 text-slate-700">{{
-                      classes.join(", ")
-                    }}</span>
-                  </div>
-                </div>
+                <EventDivisionsPanel
+                  :tournament="event"
+                  :show-heading="false"
+                  class="mt-2"
+                />
               </details>
 
               <details
@@ -194,42 +193,20 @@
             <!-- Desktop Details -->
             <div class="hidden md:block">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Weight Classes -->
-                <div v-if="event.weightClasses || event.details?.divisions">
-                  <p
-                    class="text-xs font-semibold tracking-[0.2em] text-slate-500 uppercase mb-2"
-                  >
-                    Divisions
-                  </p>
-                  <div class="space-y-2">
-                    <div
-                      v-for="(classes, division) in event.weightClasses ||
-                      event.details?.divisions"
-                      :key="division"
-                      class="rounded-md border border-slate-200/80 bg-slate-50/60 px-3 py-2"
-                    >
-                      <p class="text-sm font-semibold text-slate-900">
-                        {{ division }}
-                      </p>
-                      <p class="text-sm text-slate-700">
-                        {{ classes.join(", ") }}
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <!-- Weight Classes (collapsible) -->
+                <EventDivisionsPanel v-if="hasDivisions" :tournament="event" />
 
-                <!-- Schedule Info -->
-                <div
+                <!-- Schedule Info (collapsible) -->
+                <details
                   v-if="
                     event.details?.weighIns || event.details?.competitionTimes
                   "
+                  class="rounded-lg border border-slate-200 bg-white/80 p-3"
                 >
-                  <p
-                    class="text-xs font-semibold tracking-[0.2em] text-slate-500 uppercase mb-2"
-                  >
+                  <summary class="font-semibold text-slate-900 cursor-pointer">
                     Schedule
-                  </p>
-                  <div class="space-y-3">
+                  </summary>
+                  <div class="mt-2 space-y-3">
                     <div v-if="event.details.weighIns?.length">
                       <p class="font-semibold text-slate-900">Weigh-ins</p>
                       <ul class="ml-4 list-disc text-slate-700">
@@ -254,13 +231,13 @@
                       </ul>
                     </div>
                   </div>
-                </div>
+                </details>
               </div>
             </div>
           </div>
 
           <!-- Location Map (only when flyer exists) -->
-          <div v-if="event.flyer" class="mt-4">
+          <div v-if="event.flyer" class="mt-4 md:hidden">
             <p
               class="text-xs font-semibold tracking-[0.2em] text-slate-500 uppercase mb-2"
             >
@@ -288,11 +265,19 @@
 </template>
 
 <script setup>
+import { computed } from "vue";
+import EventDivisionsPanel from "@/components/EventDivisionsPanel.vue";
+
 const props = defineProps({
   event: Object,
   index: Number,
 });
-const emit = defineEmits(["lightbox"]);
+const emit = defineEmits(["lightbox", "hover", "leave"]);
+
+const hasDivisions = computed(() => {
+  if (Array.isArray(props.event?.divisionsConfig)) return true;
+  return !!(props.event?.weightClasses || props.event?.details?.divisions);
+});
 
 const openInMaps = (location) => {
   const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(

@@ -1,49 +1,53 @@
 <template>
-  <section class="max-w-2xl mx-auto text-center mt-12 px-4">
-    <img
-      src="/src/assets/images/logos/cawf.png"
-      alt="CAWF Logo"
-      class="mx-auto mb-6 w-32 h-32 object-contain drop-shadow"
-    />
-    <h2 class="text-3xl font-serif font-bold mb-4 text-gray-900 tracking-tight">
-      CAWF Affiliation
-    </h2>
-    <p class="text-lg text-gray-700 mb-6 leading-relaxed">
-      NB Armwrestling is proudly recognized by the
-      <span class="font-semibold text-[#0055a4]"
-        >Canadian Armwrestling Federation (CAWF)</span
+  <section class="mx-auto max-w-3xl text-center">
+    <div class="page-surface px-6 py-8 sm:px-9">
+      <img
+        src="/src/assets/images/logos/cawf.png"
+        alt="CAWF Logo"
+        class="mx-auto mb-6 h-28 w-28 object-contain drop-shadow"
+      />
+      <p class="section-label mb-2">National Affiliation</p>
+      <h2
+        class="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl"
       >
-      as the official governing body for our province. We are part of a national
-      community dedicated to growing the sport, supporting athletes, and
-      upholding the highest standards of competition and sportsmanship.
-    </p>
-
-    <div
-      class="bg-white/90 border-l-4 border-[#0055a4] rounded-xl p-6 mb-6 text-left shadow-sm"
-    >
-      <h3 class="text-xl font-semibold mb-2 text-[#0055a4] tracking-wide">
-        What is the CAWF?
-      </h3>
-      <p class="text-gray-700 mb-2">
-        The CAWF is the national organization for armwrestling in Canada,
-        connecting provincial associations, organizing national championships,
-        and representing Canada at the World Armwrestling Federation (WAF).
+        CAWF Affiliation
+      </h2>
+      <p class="mb-6 text-lg leading-relaxed text-slate-600">
+        NB Armwrestling is proudly recognized by the
+        <span class="font-semibold text-sky-700"
+          >Canadian Armwrestling Federation (CAWF)</span
+        >
+        as the official governing body for our province. We are part of a
+        national community dedicated to growing the sport, supporting athletes,
+        and upholding the highest standards of competition and sportsmanship.
       </p>
-      <ul class="list-disc ml-6 text-gray-700">
-        <li>National rankings and championships</li>
-        <li>Rules, standards, and athlete development</li>
-        <li>Pathway to international competition</li>
-      </ul>
-    </div>
 
-    <a
-      href="https://cawf.ca/"
-      target="_blank"
-      rel="noopener"
-      style="color: white"
-      class="inline-block mt-4 px-6 py-2 rounded-md bg-[#0055a4] text-white font-semibold shadow-sm hover:bg-[#003366] transition-colors duration-200"
-      >Visit CAWF Website</a
-    >
+      <div
+        class="mb-6 rounded-xl border border-sky-200/70 bg-white/85 p-6 text-left shadow-sm"
+      >
+        <h3 class="mb-2 text-xl font-semibold tracking-wide text-sky-800">
+          What is the CAWF?
+        </h3>
+        <p class="mb-2 text-slate-700">
+          The CAWF is the national organization for armwrestling in Canada,
+          connecting provincial associations, organizing national championships,
+          and representing Canada at the World Armwrestling Federation (WAF).
+        </p>
+        <ul class="ml-6 list-disc text-slate-700">
+          <li>National rankings and championships</li>
+          <li>Rules, standards, and athlete development</li>
+          <li>Pathway to international competition</li>
+        </ul>
+      </div>
+
+      <a
+        href="https://cawf.ca/"
+        target="_blank"
+        rel="noopener"
+        class="btn-primary inline-flex mt-2"
+        >Visit CAWF Website</a
+      >
+    </div>
   </section>
 </template>
 

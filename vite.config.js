@@ -5,6 +5,8 @@ import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 
 const localMode = (process.env.VITE_API_MODE || '').toLowerCase() === 'local' || process.env.VITE_API_DISABLE === 'true'
+const defaultApiOrigin = 'http://localhost:7073'
+const proxyTarget = process.env.VITE_API_PROXY_TARGET || process.env.VITE_API_BASE || defaultApiOrigin
 
 export default defineConfig({
   base: '/',
@@ -19,7 +21,7 @@ export default defineConfig({
   server: localMode ? undefined : {
     proxy: {
       '/api': {
-        target: process.env.VITE_API_BASE || 'http://localhost:7075',
+        target: proxyTarget,
         changeOrigin: true,
       },
     },

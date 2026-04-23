@@ -1,95 +1,94 @@
 <template>
-  <section class="bg-[#f8f5f1]">
-    <!-- Hero: stronger overlay + integrated content flow -->
+  <section class="space-y-10 sm:space-y-12">
     <div
-      class="relative h-[520px] sm:h-[580px] bg-fixed bg-cover bg-no-repeat flex flex-col items-center justify-center w-screen left-1/2 right-1/2 -ml-[50vw] -mr-[50vw]"
-      :style="{
-        backgroundImage: `url(${heroImage})`,
-        backgroundPosition: 'center 20%',
-      }"
+      class="hero-wrap overflow-hidden rounded-[1.7rem] border border-white/40"
     >
       <div
-        class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/55 to-[#f8f5f1]/95"
+        class="hero-media"
+        :style="{ backgroundImage: `url(${heroImage})` }"
       ></div>
+      <div class="hero-overlay">
+        <p class="section-label mb-3 text-white/80">
+          New Brunswick Armwrestling
+        </p>
+        <h1 class="hero-title">Built For Pullers Who Train To Win</h1>
+        <p class="hero-copy">
+          Join a growing provincial scene with regular practices, top-tier
+          tournaments, and a community that pushes each athlete forward.
+        </p>
+        <div class="mt-7 flex flex-wrap items-center gap-3">
+          <RouterLink to="/teams" class="btn-primary">Find a Team</RouterLink>
+          <RouterLink to="/events" class="btn-secondary"
+            >See the Schedule</RouterLink
+          >
+        </div>
+      </div>
     </div>
 
-    <!-- Main Content Panel: reduced modal feel + max-width rhythm -->
-    <div
-      class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14 text-center -mt-24 sm:-mt-28 relative z-10"
-    >
-      <div
-        class="bg-white/80 backdrop-blur-sm border border-slate-200/70 rounded-2xl shadow-sm px-6 sm:px-10 py-10 sm:py-12"
-      >
-        <h2
-          class="text-4xl sm:text-6xl font-serif font-extrabold text-slate-900 tracking-tight mb-5 leading-tight"
-          style="font-family: &quot;Playfair Display&quot;, serif"
-        >
-          Arm Wrestling in New Brunswick
+    <div class="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
+      <article class="page-surface p-6 sm:p-8">
+        <p class="section-label mb-3">What You Get</p>
+        <h2 class="text-3xl font-extrabold text-slate-900 sm:text-4xl">
+          Train Local, Compete National
         </h2>
-        <p
-          class="mt-4 text-slate-700 text-lg sm:text-xl leading-relaxed font-light"
-        >
-          Welcome to the home of NB Armwrestling —
-          <span class="font-semibold text-blue-900"
-            >where strength meets community</span
-          >.<br />
-          Whether you're a beginner or a seasoned puller, we’ve got a table for
-          you.
+        <p class="mt-4 text-base leading-relaxed text-slate-600 sm:text-lg">
+          NB Armwrestling supports newcomers and elite athletes alike through
+          coaching, event access, and a direct path to CAWF-sanctioned
+          competition.
         </p>
-
-        <!-- CTA Group: primary + secondary -->
-        <div
-          class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3"
-        >
-          <RouterLink
-            to="/teams"
-            class="inline-flex items-center justify-center bg-blue-700 hover:bg-blue-800 !text-white hover:!text-white font-bold text-base sm:text-lg h-11 sm:h-12 px-8 sm:px-10 rounded-full shadow-lg shadow-blue-200/40 transition-all duration-200 tracking-wide border-2 border-blue-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700 focus-visible:ring-offset-2"
-            style="letter-spacing: 0.04em"
-          >
-            Join a Local Practice
-          </RouterLink>
-          <RouterLink
-            to="/schedule"
-            class="inline-flex items-center justify-center text-blue-800 font-semibold text-sm sm:text-base h-11 sm:h-12 px-6 rounded-full border border-blue-200 hover:border-blue-400 hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700 focus-visible:ring-offset-2 transition"
-            aria-label="View upcoming events"
-          >
-            View Upcoming Events
-          </RouterLink>
-        </div>
-
-        <!-- Next Event -->
-        <hr
-          class="my-10 sm:my-12 border-t border-gray-200/70 w-2/3 mx-auto rounded-full"
-        />
-        <div v-if="eventStore.upcomingEvent" class="mt-8 flex justify-center">
-          <div
-            class="bg-white/95 border border-blue-200 rounded-2xl shadow-lg shadow-blue-200/40 px-6 sm:px-8 py-8 max-w-md w-full text-center"
-          >
-            <h3
-              class="text-2xl font-bold font-serif mb-3 text-slate-900 tracking-tight"
-            >
-              Next Event
-            </h3>
-            <!-- Lightbox Trigger -->
-            <img
-              :src="eventStore.upcomingEvent.flyer || logoImage"
-              :alt="eventStore.upcomingEvent.title"
-              class="w-full max-w-xs mx-auto rounded-xl shadow-md cursor-pointer transition hover:scale-[1.02] border border-slate-200"
-              @error="onFlyerError"
-              @click="openLightbox(eventStore.upcomingEvent.flyer)"
-            />
-            <p class="mt-4 text-lg font-semibold text-slate-800">
-              {{ eventStore.upcomingEvent.title }}
+        <div class="mt-6 grid gap-3 sm:grid-cols-2">
+          <div class="feature-card">
+            <h3 class="feature-title">Weekly Team Practices</h3>
+            <p class="feature-copy">
+              Multiple clubs across the province with active pullers.
             </p>
-            <p class="text-sm text-slate-600">
+          </div>
+          <div class="feature-card">
+            <h3 class="feature-title">Event-Ready Coaching</h3>
+            <p class="feature-copy">
+              Preparation support for first-timers through advanced classes.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3 class="feature-title">Official Pathway</h3>
+            <p class="feature-copy">
+              Compete under recognized standards and reach national stages.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3 class="feature-title">Strong Community</h3>
+            <p class="feature-copy">
+              Mentorship and team culture built around long-term growth.
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="page-surface p-6 sm:p-8">
+        <p class="section-label mb-3">Next Event</p>
+
+        <div v-if="eventStore.upcomingEvent" class="space-y-4">
+          <img
+            :src="eventStore.upcomingEvent.flyer || logoImage"
+            :alt="eventStore.upcomingEvent.title"
+            class="event-flyer"
+            @error="onFlyerError"
+            @click="openLightbox(eventStore.upcomingEvent.flyer)"
+          />
+
+          <div>
+            <h3 class="text-2xl font-bold text-slate-900">
+              {{ eventStore.upcomingEvent.title }}
+            </h3>
+            <p class="mt-1 text-sm text-slate-500">
               {{ new Date(eventStore.upcomingEvent.date).toLocaleString() }}
             </p>
             <button
-              class="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-blue-700 hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700 focus-visible:ring-offset-2 rounded-md transition"
+              class="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-sky-800 hover:text-sky-950"
               @click="openInMaps(eventStore.upcomingEvent.location)"
               aria-label="Open next event location in Google Maps"
             >
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+              <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fill-rule="evenodd"
                   d="M10 2a6 6 0 016 6c0 4.418-6 10-6 10S4 12.418 4 8a6 6 0 016-6zm0 8a2 2 0 100-4 2 2 0 000 4z"
@@ -100,66 +99,53 @@
                 eventStore.upcomingEvent.location
               }}</span>
             </button>
-            <RouterLink
-              to="/schedule"
-              class="mt-5 inline-flex items-center justify-center text-blue-700 font-semibold hover:text-blue-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-700 focus-visible:ring-offset-2 rounded-md transition"
-            >
-              See All Events
-            </RouterLink>
           </div>
+
+          <RouterLink to="/events" class="btn-primary w-full sm:w-auto"
+            >Browse all events</RouterLink
+          >
         </div>
 
-        <p v-else class="text-slate-600 mt-10">
-          No events yet. Check back soon!
+        <p v-else class="text-slate-500">
+          No events posted yet. Check back soon.
         </p>
-
-        <!-- Embedded YouTube Video -->
-        <hr
-          class="my-10 sm:my-12 border-t border-gray-200/70 w-2/3 mx-auto rounded-full"
-        />
-        <div class="mt-8 max-w-5xl mx-auto">
-          <div class="bg-white/95 rounded-2xl shadow-lg px-6 sm:px-10 py-8">
-            <h4
-              class="text-2xl sm:text-3xl font-bold font-serif text-slate-900 mb-4"
-            >
-              NB Armwrestling Members at the Superman Tournament in Nova Scotia
-            </h4>
-            <div
-              class="relative rounded-xl overflow-hidden shadow-md border border-slate-200"
-              style="padding-bottom: 56.25%; height: 0"
-            >
-              <iframe
-                src="https://www.youtube-nocookie.com/embed/McgTdXpHI5I?rel=0"
-                title="NB Armwrestling Highlights"
-                frameborder="0"
-                allow="
-                  accelerometer;
-                  autoplay;
-                  clipboard-write;
-                  encrypted-media;
-                  gyroscope;
-                  picture-in-picture;
-                "
-                allowfullscreen
-                referrerpolicy="strict-origin-when-cross-origin"
-                class="absolute top-0 left-0 w-full h-full"
-              ></iframe>
-            </div>
-          </div>
-        </div>
-      </div>
+      </article>
     </div>
 
-    <!-- Lightbox Modal -->
+    <article class="page-surface overflow-hidden p-6 sm:p-8">
+      <p class="section-label mb-3">Featured Video</p>
+      <h2 class="text-2xl font-bold text-slate-900 sm:text-3xl">
+        NB Armwrestling Members at Superman Tournament
+      </h2>
+      <div class="video-shell mt-5">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/McgTdXpHI5I?rel=0"
+          title="NB Armwrestling Highlights"
+          frameborder="0"
+          allow="
+            accelerometer;
+            autoplay;
+            clipboard-write;
+            encrypted-media;
+            gyroscope;
+            picture-in-picture;
+          "
+          allowfullscreen
+          referrerpolicy="strict-origin-when-cross-origin"
+          class="absolute left-0 top-0 h-full w-full"
+        ></iframe>
+      </div>
+    </article>
+
     <div
       v-if="lightboxImage"
-      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center"
+      class="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/80 px-4"
       @click.self="closeLightbox"
     >
       <img
         :src="lightboxImage"
-        alt="Event Flyer"
-        class="max-w-full max-h-full rounded shadow-xl"
+        alt="Event flyer"
+        class="max-h-[88vh] max-w-full rounded-2xl border border-white/20"
       />
     </div>
   </section>
@@ -175,6 +161,7 @@ const eventStore = useEventStore();
 const lightboxImage = ref(null);
 
 const openLightbox = (src) => {
+  if (!src) return;
   lightboxImage.value = src;
 };
 
@@ -183,9 +170,7 @@ const closeLightbox = () => {
 };
 
 const openInMaps = (location) => {
-  const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-    location,
-  )}`;
+  const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
   window.open(url, "_blank");
 };
 
@@ -199,8 +184,97 @@ onMounted(() => {
 </script>
 
 <style scoped>
-h2,
-p {
-  transition: opacity 0.3s ease;
+.hero-wrap {
+  position: relative;
+  min-height: 460px;
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 24%;
+  transform: scale(1.03);
+}
+
+.hero-overlay {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: 460px;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.6rem;
+  background: linear-gradient(
+    165deg,
+    rgba(5, 11, 28, 0.26) 0%,
+    rgba(5, 11, 28, 0.8) 62%,
+    rgba(8, 19, 42, 0.95) 100%
+  );
+}
+
+.hero-title {
+  margin: 0;
+  max-width: 18ch;
+  color: #f8fbff;
+  font-size: clamp(2.1rem, 4.8vw, 3.8rem);
+  line-height: 1.04;
+}
+
+.hero-copy {
+  margin-top: 0.9rem;
+  max-width: 60ch;
+  color: rgba(226, 232, 240, 0.93);
+  font-size: 1.02rem;
+}
+
+.feature-card {
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  border-radius: 1rem;
+  background: rgba(248, 250, 252, 0.9);
+  padding: 1rem;
+}
+
+.feature-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.feature-copy {
+  margin-top: 0.45rem;
+  font-size: 0.92rem;
+  color: #64748b;
+}
+
+.event-flyer {
+  width: 100%;
+  max-height: 460px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 1rem;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 170ms ease;
+}
+
+.event-flyer:hover {
+  transform: scale(1.01);
+}
+
+.video-shell {
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.34);
+  border-radius: 1rem;
+  padding-bottom: 56.25%;
+  box-shadow: 0 20px 30px rgba(15, 23, 42, 0.16);
+}
+
+@media (min-width: 640px) {
+  .hero-overlay {
+    padding: 2.4rem;
+  }
 }
 </style>

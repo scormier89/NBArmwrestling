@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { getEvents } from '@/services/eventsApi'
 
 
 export const useEventStore = defineStore('event', () => {
@@ -60,10 +61,8 @@ export const useEventStore = defineStore('event', () => {
 
   const fetchEvents = async () => {
     try {
-      const res = await fetch('/data/events.json')
-      if (!res.ok) throw new Error('Failed to load events.json')
-      const data = await res.json()
-      events.value = data.slice().sort((a, b) => new Date(a.date) - new Date(b.date))
+      const data = await getEvents({ province: defaultProvince, upcomingOnly: false })
+      events.value = (Array.isArray(data) ? data : []).slice().sort((a, b) => new Date(a.date) - new Date(b.date))
     } catch (e) {
       events.value = hardcodedEvents.slice().sort((a, b) => new Date(a.date) - new Date(b.date))
     } finally {

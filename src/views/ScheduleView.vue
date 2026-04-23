@@ -1,7 +1,7 @@
 <template>
-  <section class="max-w-6xl mx-auto px-4 py-10 relative">
+  <section class="relative py-6 sm:py-8">
     <h1
-      class="text-3xl font-serif font-bold text-center mb-8 sticky top-[80px] bg-white z-10 py-2 tracking-tight"
+      class="mb-7 rounded-2xl border border-slate-200/70 bg-white/80 px-4 py-3 text-center text-3xl font-bold tracking-tight backdrop-blur sticky top-[92px] z-20"
     >
       Upcoming Events
     </h1>
@@ -11,7 +11,7 @@
       <div class="flex-1">
         <div
           v-if="eventStore.upcomingEvents.length === 0"
-          class="text-center text-gray-500"
+          class="page-surface p-8 text-center text-slate-500"
         >
           No upcoming events.
         </div>
@@ -27,63 +27,101 @@
             :data-month="month"
           >
             <h2
-              class="text-xl font-semibold mb-6 text-gray-800 sticky top-[120px] bg-white z-10 py-2 border-b border-blue-200 tracking-wide"
+              class="section-label mb-6 sticky top-[160px] z-10 border-b border-sky-200/80 bg-white/80 py-2 text-[0.78rem] backdrop-blur"
               :ref="(el) => (monthRefs[month] = el)"
               :data-month="month"
             >
               {{ month }}
             </h2>
 
-            <EventCard
-              v-for="(event, index) in monthEvents"
-              :key="event.title"
-              :event="event"
-              :index="index"
-              @lightbox="openLightbox"
-            />
+            <div class="stagger-list">
+              <div
+                v-for="(event, index) in monthEvents"
+                :key="event.title"
+                :data-event-title="event.title"
+                :ref="(el) => (eventRefs[event.title] = el)"
+                class="rounded-2xl transition"
+                :class="
+                  activeEvent?.title === event.title
+                    ? 'ring-2 ring-sky-500/50 shadow-lg shadow-sky-100/60'
+                    : ''
+                "
+              >
+                <EventCard
+                  :event="event"
+                  :index="index"
+                  @lightbox="openLightbox"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Month Scroller beside cards -->
+      <!-- Desktop Side Panel: Floating Map + Month Scroller -->
       <div
-        class="hidden md:flex flex-col sticky top-[250px] min-height[500px] h-fit self-start pt-14"
+        class="hidden h-fit self-start gap-6 pt-6 md:sticky md:top-[210px] md:flex md:flex-col"
       >
-        <button
-          v-for="month in Object.keys(groupedEvents)"
-          :key="month"
-          @click="scrollToMonth(month)"
-          class="transform -rotate-90 origin-left mb-6 text-[0.7rem] font-semibold tracking-[0.2em] text-gray-500 hover:text-blue-700 transition-colors"
-          :class="{
-            'text-blue-800 underline': currentMonth?.trim() === month.trim(),
-          }"
-        >
-          {{ month.slice(0, 3).toUpperCase() }}
-          <span
-            v-if="currentMonth?.trim() === month.trim()"
-            class="block w-1 h-1 bg-blue-500 rounded-full mx-auto mt-1"
-          ></span>
-        </button>
+        <div class="page-surface w-[320px] p-4">
+          <p class="section-label mb-3">Event Location</p>
+          <div
+            class="relative overflow-hidden rounded-xl border border-slate-200/80 shadow-sm"
+            style="padding-bottom: 85%; height: 0"
+          >
+            <iframe
+              :src="activeMapUrl"
+              title="Event location map"
+              loading="lazy"
+              class="absolute top-0 left-0 w-full h-full"
+              referrerpolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+          <p class="mt-3 text-sm text-slate-600">
+            <span class="font-semibold text-slate-800">{{
+              activeEventTitle
+            }}</span>
+            <span class="ml-1">{{ activeEventLocation }}</span>
+          </p>
+          <p class="mt-1 text-xs text-slate-500">Updates as you scroll.</p>
+        </div>
+
+        <div class="flex flex-col pt-2">
+          <button
+            v-for="month in Object.keys(groupedEvents)"
+            :key="month"
+            @click="scrollToMonth(month)"
+            class="origin-left mb-6 -rotate-90 text-[0.7rem] font-semibold tracking-[0.2em] text-slate-500 transition-colors hover:text-sky-700"
+            :class="{
+              'text-sky-800 underline': currentMonth?.trim() === month.trim(),
+            }"
+          >
+            {{ month.slice(0, 3).toUpperCase() }}
+            <span
+              v-if="currentMonth?.trim() === month.trim()"
+              class="mx-auto mt-1 block h-1 w-1 rounded-full bg-sky-500"
+            ></span>
+          </button>
+        </div>
       </div>
     </div>
 
     <!-- Lightbox -->
     <div
       v-if="lightboxImage"
-      class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center"
+      class="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/80"
       @click.self="closeLightbox"
     >
       <img
         :src="lightboxImage"
         alt="Flyer"
-        class="max-w-full max-h-full rounded shadow-lg"
+        class="max-h-[90vh] max-w-full rounded-2xl border border-white/20 shadow-xl"
       />
     </div>
   </section>
 </template>
 
 <script setup>
-import { onMounted, ref, watch, nextTick } from "vue";
+import { onMounted, ref, watch, nextTick, computed } from "vue";
 import { useEventStore } from "@/stores/eventStore";
 import EventCard from "@/components/EventCard.vue";
 
@@ -92,6 +130,9 @@ const groupedEvents = ref({});
 const lightboxImage = ref(null);
 const currentMonth = ref(null);
 const monthRefs = ref({});
+const activeEvent = ref(null);
+const eventRefs = ref({});
+let eventObserver = null;
 let observer = null;
 
 const openLightbox = (src) => {
@@ -101,6 +142,25 @@ const openLightbox = (src) => {
 const closeLightbox = () => {
   lightboxImage.value = null;
 };
+
+const setActiveEvent = (event) => {
+  activeEvent.value = event || null;
+};
+
+const activeMapUrl = computed(() => {
+  const location = activeEvent.value?.location || "New Brunswick, Canada";
+  return `https://www.google.com/maps?q=${encodeURIComponent(location)}&output=embed`;
+});
+
+const activeEventTitle = computed(() => {
+  return activeEvent.value?.title || "New Brunswick";
+});
+
+const activeEventLocation = computed(() => {
+  return activeEvent.value?.location
+    ? `• ${activeEvent.value.location}`
+    : "• Canada";
+});
 
 const scrollToMonth = async (month) => {
   const el = monthRefs.value[month];
@@ -135,6 +195,7 @@ watch(
     await nextTick();
 
     if (observer) observer.disconnect();
+    if (eventObserver) eventObserver.disconnect();
 
     observer = new IntersectionObserver(
       (entries) => {
@@ -146,20 +207,38 @@ watch(
           }
         }
       },
-      { rootMargin: "-120px 0px -70% 0px" }
+      { rootMargin: "-120px 0px -70% 0px" },
     );
 
     for (const month in groups) {
       const el = monthRefs.value[month];
       if (el) observer.observe(el);
     }
+
+    eventObserver = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) {
+          const title = visible.target.getAttribute("data-event-title");
+          const found = events.find((e) => e.title === title);
+          if (found) setActiveEvent(found);
+        }
+      },
+      { threshold: [0.3, 0.6, 0.9] },
+    );
+
+    Object.values(eventRefs.value).forEach((el) => {
+      if (el) eventObserver.observe(el);
+    });
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 const openInMaps = (location) => {
   const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-    location
+    location,
   )}`;
   window.open(url, "_blank");
 };
@@ -170,12 +249,4 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-section {
-  font-family: "Roboto", "Segoe UI", sans-serif;
-}
-h1,
-h2 {
-  background-color: #f8f5f1;
-}
-</style>
+<style scoped></style>
