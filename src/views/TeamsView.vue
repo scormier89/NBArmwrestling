@@ -216,6 +216,7 @@
 import { ref, computed, onMounted, onUnmounted, watch, nextTick } from "vue";
 import acadianLogo from "@/assets/images/logos/acadian.jpg";
 import basementLogo from "@/assets/images/logos/basement.png";
+import cccLogo from "@/assets/images/logos/ccc.jpg";
 import maximumLogo from "@/assets/images/logos/maximum.png";
 import hubcityLogo from "@/assets/images/logos/hubcity.jpg";
 import northwestLogo from "@/assets/images/logos/northwest.jpg";
@@ -227,6 +228,7 @@ const teams = [
     city: "Fredericton",
     region: "NB",
     fb: "https://www.facebook.com/groups/824740288415124/about",
+    logo: cccLogo,
   },
   {
     name: "Hub City Hitmen",
